@@ -1,5 +1,14 @@
+# 核心依赖
 streamlit
-python-multipart
-websockets
+fastapi
+uvicorn[standard]
+# 数据模型/配置
+pydantic
 pyyaml
+# 日志
 loguru
+# 工具
+python-multipart
+python-dotenv
+# 测试
+pytest
