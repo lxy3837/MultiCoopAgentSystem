@@ -2,6 +2,8 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
+
+from data import AgentStateModel, DataManager
 from utils.logger import get_logger
 
 
@@ -54,3 +56,21 @@ class BaseAgent(ABC):
             if hasattr(self.state, k):
                 setattr(self.state, k, v)
         self.state.updated_at = datetime.now()
+
+    # agents/base_agent.py 中新增 stop() 方法
+    def stop(self):
+        """停止Agent（修改状态为stopped）"""
+        self.state.status = "stopped"
+        self.state.load = 0.0
+        self.state.updated_at = datetime.now()
+        # 同步状态到DataManager
+        state_model = AgentStateModel(
+            agent_id=self.state.agent_id,
+            agent_type=self.state.agent_type,
+            status=self.state.status,
+            load=self.state.load,
+            error_msg=self.state.error_msg,
+            updated_at=self.state.updated_at
+        )
+        DataManager().save_agent_state(state_model)
+        self.logger.info(f"Agent {self.agent_id} 已停止")

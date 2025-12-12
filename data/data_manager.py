@@ -245,6 +245,27 @@ class DataManager:
             self.logger.error(f"查询所有Agent状态失败：{e}")
             return {}
 
+    # data/data_manager.py 中新增方法
+    def delete_agent_state(self, agent_id: str) -> bool:
+        """删除Agent状态"""
+        try:
+            with open(self.agent_state_file, "r", encoding="utf-8") as f:
+                agent_states = json.load(f)
+
+            if agent_id not in agent_states:
+                self.logger.warning(f"删除Agent状态失败：{agent_id} 不存在")
+                return False
+
+            del agent_states[agent_id]
+            with open(self.agent_state_file, "w", encoding="utf-8") as f:
+                json.dump(agent_states, f, ensure_ascii=False, indent=4)
+
+            self.logger.info(f"Agent {agent_id} 状态已删除")
+            return True
+        except Exception as e:
+            self.logger.error(f"删除Agent状态失败：{e}")
+            return False
+
 
 # 导出核心类
 __all__ = ["DataManager"]
