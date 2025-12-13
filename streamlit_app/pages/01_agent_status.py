@@ -42,7 +42,7 @@ class AgentStatusPage:
         # 渲染表格（带进度条/标签可视化）
         st.dataframe(
             agent_data,
-            use_container_width=True,
+            width='stretch',
             column_config={
                 "状态": st.column_config.SelectboxColumn(
                     "状态",

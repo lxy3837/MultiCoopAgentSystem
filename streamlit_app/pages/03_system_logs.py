@@ -14,7 +14,7 @@ class SystemLogsPage:
     def __init__(self):
         self.logger = get_logger("system_logs")
         self.context = get_agent_context()
-        self.log_file_path = self.context.config.log_config["file_path"]
+        self.log_file_path = self.context.config.log_config.file_path
 
     def filter_logs(self, logs: list, level: str, keyword: str):
         """过滤日志（按级别/关键词）"""

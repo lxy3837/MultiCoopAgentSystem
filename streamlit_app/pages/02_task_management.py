@@ -1,5 +1,7 @@
 # 核心类：TaskManagementPage（任务管理页核心类）
 # 核心函数：create_task_form()、assign_task()、render_task_list()
+from datetime import datetime
+
 import streamlit as st
 import sys
 
@@ -86,7 +88,7 @@ class TaskManagementPage:
 
         st.dataframe(
             task_data,
-            use_container_width=True,
+            width='stretch',
             column_config={
                 "状态": st.column_config.SelectboxColumn(
                     "状态",
