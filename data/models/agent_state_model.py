@@ -12,8 +12,5 @@ class AgentStateModel(BaseModel):
     error_msg: Optional[str] = Field(default="", description="错误信息（状态为error时填充）")
     updated_at: datetime = Field(default_factory=datetime.now, description="状态最后更新时间")
 
-    def model_dump(self):
-        """兼容旧版pydantic的dict()方法"""
-        return self.dict()
 
 __all__ = ["AgentStateModel"]

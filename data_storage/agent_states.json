@@ -1,1 +1,34 @@
-{}
+{
+    "coordinator_001": {
+        "agent_id": "coordinator_001",
+        "agent_type": "coordinator",
+        "status": "idle",
+        "load": 0.0,
+        "error_msg": "",
+        "updated_at": "2025-12-13T20:29:39.211054"
+    },
+    "executor_001": {
+        "agent_id": "executor_001",
+        "agent_type": "executor",
+        "status": "idle",
+        "load": 0.0,
+        "error_msg": "",
+        "updated_at": "2025-12-13T20:29:39.214815"
+    },
+    "executor_002": {
+        "agent_id": "executor_002",
+        "agent_type": "executor",
+        "status": "idle",
+        "load": 0.0,
+        "error_msg": "",
+        "updated_at": "2025-12-13T20:29:39.218113"
+    },
+    "analyzer_001": {
+        "agent_id": "analyzer_001",
+        "agent_type": "analyzer",
+        "status": "idle",
+        "load": 0.0,
+        "error_msg": "",
+        "updated_at": "2025-12-13T20:29:39.220504"
+    }
+}
