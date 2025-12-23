@@ -1,0 +1,403 @@
+# ========================= 系统通用文件（必保留） =========================
+# Windows系统
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+# 桌面.ini
+Desktop.ini
+# 临时文件
+*.tmp
+*.temp
+*.bak
+
+# macOS系统
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+# macOS Ventura及以上
+.icloud
+# 自定义桌面/文档等
+Desktop/
+Documents/
+Downloads/
+
+# Linux系统
+*~
+# 交换文件
+*.swp
+*.swo
+# 核心转储文件
+core
+*.core
+
+# ========================= IDE/编辑器配置（按需保留） =========================
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/*.code-snippets
+*.code-workspace
+
+# IntelliJ IDEA/Android Studio/WebStorm/PyCharm等
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+build/
+!gradle/build/
+!gradlew
+!gradlew.bat
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+.metadata/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+.netrwhist
+*~
+
+# Notepad++
+*.ndb
+*.ncb
+*.ncr
+*.ndo
+*.ndt
+*.ndw
+
+# ========================= 编程语言/框架专属（按需删减） =========================
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+.eggs/
+dist/
+build/
+develop-eggs/
+.installed.cfg
+*.egg
+MANIFEST
+# Poetry
+poetry.lock
+# Pipenv
+Pipfile.lock
+# pyenv
+.python-version
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Node.js/前端（React/Vue/Angular等）
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+# 构建产物
+dist/
+build/
+out/
+.next/
+.nuxt/
+.vuepress/dist/
+.gridsome/
+public/
+# 缓存
+.cache/
+.eslintcache
+# 环境变量
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# 临时文件
+*.tmp
+*.log
+# TypeScript
+*.tsbuildinfo
+# 前端工具
+.sass-cache/
+*.css.map
+*.less.map
+*.scss.map
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.jsp
+*.jpeg
+*.jpg
+*.gif
+*.png
+# Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+!mvnw
+!mvnw.cmd
+# Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+# 测试
+test-output/
+surefire-reports/
+
+# PHP
+vendor/
+composer.lock
+composer.phar
+*.php~
+*.phtml~
+*.inc~
+# Laravel
+.env
+storage/framework/
+storage/logs/
+bootstrap/cache/
+public/storage/
+public/hot/
+# Symfony
+var/
+vendor/
+.env
+.env.local
+.env.test
+.env.test.local
+
+# Go
+# 编译产物
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+# 模块缓存
+go.sum
+vendor/
+# 构建目录
+bin/
+obj/
+# GoLand
+.idea/
+
+# Ruby/Rails
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+# Bundler
+Gemfile.lock
+.bundle/
+# Rails
+log/
+tmp/
+storage/
+public/assets/
+.byebug_history
+config/master.key
+config/credentials.yml.enc
+
+# C/C++
+*.obj
+*.exe
+*.dll
+*.lib
+*.so
+*.dylib
+*.out
+*.o
+*.a
+*.la
+*.lo
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Swift/iOS
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+# CocoaPods
+Pods/
+Podfile.lock
+*.xcworkspace/
+!*.xcodeproj/
+
+# Android
+bin/
+gen/
+out/
+gen/
+gradle/
+!gradle/wrapper/
+!gradle/gradle-wrapper.properties
+local.properties
+*.apk
+*.ap_
+*.dex
+*.class
+*.jar
+*.aar
+*.so
+# Android Studio
+.cxx/
+build/
+*.iml
+.idea/
+gradle-app.setting
+!gradle-wrapper.jar
+# ProGuard
+proguard/
+
+# ========================= 构建/打包/日志（通用） =========================
+# 日志文件
+*.log
+logs/
+log/
+# 缓存文件
+*.cache
+cache/
+# 压缩包
+*.zip
+*.tar.gz
+*.rar
+*.7z
+# 临时目录
+tmp/
+temp/
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+# 备份文件
+*.bak
+*.backup
+*.old
+# 锁文件
+*.lock
+# 进程文件
+*.pid
+*.pid.lock
+
+# ========================= 敏感/配置文件（必保留） =========================
+# 环境变量
+.env
+.env.*
+!.env.example
+# 密钥/证书
+*.pem
+*.key
+*.cert
+*.crt
+*.jks
+# 配置文件
+config.json
+config.yml
+config.yaml
+settings.json
+# 秘钥文件
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.pub
+
+# ========================= 其他通用忽略项 =========================
+# Git自身（防止嵌套.git）
+.git/
+# 包管理临时文件
+*.tmp
+*.temp
+# 编辑器备份
+*~
+# 权限文件
+*.perm
+# 虚拟化
+.vagrant/
+.dockerignore
+docker-compose.override.yml
+# 云服务配置
+.serverless/
