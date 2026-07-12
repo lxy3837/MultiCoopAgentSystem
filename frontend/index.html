@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCASys - Multi-Agent Collaboration System</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🔧</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient Orbs -->
+  <div class="bg-ambient">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-brand">
+        <div class="header-logo">M</div>
+        <div>
+          <h1 class="header-title"><span>MCASys</span></h1>
+          <div style="font-size:var(--font-xs);color:var(--text-muted)">Multi-Agent Collaboration System</div>
+        </div>
+      </div>
+      <div class="header-status">
+        <div class="status-dot" id="statusDot"></div>
+        <span class="status-text" id="statusText">系统运行中</span>
+      </div>
+    </header>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card" id="statAgents">
+        <div class="stat-icon purple">◈</div>
+        <div class="stat-value" id="valAgents">--</div>
+        <div class="stat-label">Active Agents</div>
+      </div>
+      <div class="stat-card" id="statTasks">
+        <div class="stat-icon cyan">◉</div>
+        <div class="stat-value" id="valTasks">--</div>
+        <div class="stat-label">Total Tasks</div>
+      </div>
+      <div class="stat-card" id="statCompleted">
+        <div class="stat-icon green">✓</div>
+        <div class="stat-value" id="valCompleted">--</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card" id="statUptime">
+        <div class="stat-icon amber">◎</div>
+        <div class="stat-value" id="valUptime">--</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="main-grid">
+      <!-- Left Column -->
+      <div style="display:flex;flex-direction:column;gap:var(--space-lg)">
+        <!-- Agents Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              Agents
+              <span class="panel-badge" id="agentsCount">0</span>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="refreshAll()">刷新</button>
+          </div>
+          <div class="panel-body">
+            <div class="agents-grid" id="agentsGrid">
+              <div class="empty-state">
+                <div class="empty-state-icon">◈</div>
+                <div class="empty-state-text">暂无 Agent 注册</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tasks Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              Tasks
+              <span class="panel-badge" id="tasksCount">0</span>
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="showCreateTaskModal()">+ 新建任务</button>
+          </div>
+          <div class="panel-body">
+            <div class="task-list" id="taskList">
+              <div class="empty-state">
+                <div class="empty-state-icon">◉</div>
+                <div class="empty-state-text">暂无任务</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="stream-panel">
+        <!-- Steps Tracker -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Workflow Steps</div>
+          </div>
+          <div class="panel-body">
+            <div class="step-list" id="stepList">
+              <div class="step-item">
+                <div class="step-indicator pending">1</div>
+                <div class="step-name" style="color:var(--text-muted)">暂无活跃任务</div>
+                <div class="step-duration">--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Feed -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Live Feed</div>
+            <button class="btn btn-sm btn-secondary" onclick="clearLiveFeed()">清除</button>
+          </div>
+          <div class="panel-body" style="padding:var(--space-sm)">
+            <div class="live-feed" id="liveFeed">
+              <div class="empty-state" style="padding:var(--space-lg)">
+                <div class="empty-state-text">等待事件...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Quick Actions</div>
+          </div>
+          <div class="panel-body">
+            <div class="actions-grid">
+              <button class="action-btn create" onclick="showCreateTaskModal()">
+                <span class="action-btn-icon">＋</span>
+                New Task
+              </button>
+              <button class="action-btn refresh" onclick="refreshAll()">
+                <span class="action-btn-icon">↻</span>
+                Refresh
+              </button>
+              <button class="action-btn clear" onclick="clearAllTasks()">
+                <span class="action-btn-icon">✕</span>
+                Clear Tasks
+              </button>
+              <button class="action-btn export" onclick="exportReport()">
+                <span class="action-btn-icon">↓</span>
+                Export
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Bar -->
+    <div class="system-bar">
+      <div class="system-bar-item">
+        <span id="sysApi">API: --</span>
+      </div>
+      <div class="system-bar-item">
+        <span id="sysVersion">v2.0.0</span>
+      </div>
+      <div class="system-bar-item">
+        <span id="sysClock">--</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Task Modal -->
+  <div class="modal-overlay" id="createTaskModal">
+    <div class="modal">
+      <h2 class="modal-title">新建任务</h2>
+      <div class="form-group">
+        <label class="form-label">任务名称</label>
+        <input class="form-input" type="text" id="taskName" placeholder="例如: 数据分析任务" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label class="form-label">任务类型</label>
+        <select class="form-select" id="taskType">
+          <option value="analysis">数据分析 (Analysis)</option>
+          <option value="computation">数值计算 (Computation)</option>
+          <option value="simulation">系统仿真 (Simulation)</option>
+          <option value="optimization">参数优化 (Optimization)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">描述 (可选)</label>
+        <textarea class="form-textarea" id="taskDesc" placeholder="描述任务需求..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeCreateTaskModal()">取消</button>
+        <button class="btn btn-primary" onclick="createTask()">创建任务</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

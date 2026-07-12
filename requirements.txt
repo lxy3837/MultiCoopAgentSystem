@@ -2,8 +2,11 @@
 streamlit
 fastapi
 uvicorn[standard]
+# 数据库
+sqlalchemy[asyncio]>=2.0
+aiosqlite
 # 数据模型/配置
-pydantic
+pydantic>=2.0
 pyyaml
 # 日志
 loguru
@@ -12,3 +15,5 @@ python-multipart
 python-dotenv
 # 测试
 pytest
+pytest-asyncio
+httpx

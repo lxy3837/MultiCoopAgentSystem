@@ -3,6 +3,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from data.data_manager import DataManager
 from data.models import TaskStatus, AgentStateModel  # 补充导入枚举和模型
+from collaboration.communication import CommunicationManager
+from collaboration.conflict_resolution import ConflictResolutionManager
 from utils.logger import get_logger  # 补充日志
 
 
@@ -15,6 +17,8 @@ class StateManager:
     completed_tasks: list = field(default_factory=list)
     failed_tasks: list = field(default_factory=list)  # 新增：失败任务列表
     data_manager: DataManager = field(default_factory=DataManager)
+    communication_manager: CommunicationManager = field(default_factory=CommunicationManager)
+    conflict_manager: ConflictResolutionManager = field(default_factory=ConflictResolutionManager)
     updated_at: datetime = field(default_factory=datetime.now)
     logger: object = field(default_factory=lambda: get_logger("state_manager"))  # 新增：日志
 

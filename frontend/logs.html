@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">系统日志 - MCASys</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 3D粒子背景 -->
+    <canvas id="starCanvas"></canvas>
+    <div class="saturn-container">
+        <div class="core-3d-container">
+            <canvas id="saturnCoreCanvas"></canvas>
+        </div>
+        <div class="ring-3d-container">
+            <canvas id="saturnRingCanvas"></canvas>
+        </div>
+    </div>
+    
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 侧边导航栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span class="logo-text">MCASys</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <ul>
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link" data-i18n="nav.home">
+                            <i class="fas fa-home"></i>
+                            <span class="nav-text">首页</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="agents.html" class="nav-link" data-i18n="nav.agents">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">Agent管理</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="tasks.html" class="nav-link" data-i18n="nav.tasks">
+                            <i class="fas fa-tasks"></i>
+                            <span class="nav-text">任务管理</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="logs.html" class="nav-link active" data-i18n="nav.logs">
+                            <i class="fas fa-history"></i>
+                            <span class="nav-text">系统日志</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="system-info">
+                    <div class="system-version" data-i18n="system.version">版本: 1.0.0</div>
+                    <div class="system-status">
+                        <i class="fas fa-circle status-indicator online"></i>
+                        <span data-i18n="system.status">在线</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1 class="page-title" data-i18n="sections.logList">系统日志</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="username" data-i18n="user.admin">管理员</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- 内容区域 -->
+            <div class="content-wrapper">
+                <!-- 日志筛选和操作 -->
+                <section class="logs-section">
+                    <div class="logs-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div class="log-filters" style="display: flex; gap: 1rem; align-items: center;">
+                            <div class="filter-group" style="display: flex; gap: 0.5rem; align-items: center;">
+                                <label data-i18n="logs.filter.level">日志级别：</label>
+                                <div style="display: flex; gap: 1rem;">
+                                    <label style="display: flex; gap: 0.25rem; align-items: center;">
+                                        <input type="checkbox" name="logLevel" value="ERROR" checked>
+                                        <span>ERROR</span>
+                                    </label>
+                                    <label style="display: flex; gap: 0.25rem; align-items: center;">
+                                        <input type="checkbox" name="logLevel" value="WARNING" checked>
+                                        <span>WARNING</span>
+                                    </label>
+                                    <label style="display: flex; gap: 0.25rem; align-items: center;">
+                                        <input type="checkbox" name="logLevel" value="INFO" checked>
+                                        <span>INFO</span>
+                                    </label>
+                                    <label style="display: flex; gap: 0.25rem; align-items: center;">
+                                        <input type="checkbox" name="logLevel" value="DEBUG">
+                                        <span>DEBUG</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="logs-actions" style="display: flex; gap: 1rem;">
+                            <button class="action-btn action-btn--primary" id="refreshLogs" data-action="refresh">刷新日志</button>
+                            <button class="action-btn action-btn--secondary" id="clearLogs" data-action="clear">清空日志</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 日志容器 -->
+                    <div class="logs-container" id="logsContainer" style="background: var(--bg-card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; height: 500px; overflow-y: auto; box-shadow: var(--shadow-md);">
+                        <!-- 日志条目将通过JavaScript动态填充 -->
+                        <div style="text-align: center; color: rgba(255, 255, 255, 0.6);">加载中...</div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
