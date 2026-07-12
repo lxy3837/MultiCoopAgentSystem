@@ -1,245 +1,233 @@
-# MCASys 多Agent协作系统
+# MCASys — 多Agent协作系统 v2.0
 
-基于 Python + Streamlit 开发的轻量、可扩展多Agent协作系统，提供可视化Web UI，支持Agent状态监控、任务创建与分配、系统日志追踪等核心能力，适合快速验证多Agent协作逻辑或小范围内部使用。
+<p align="center">
+  <img src="docs/screenshots/dashboard_full.png" alt="MCASys Dashboard" width="900">
+</p>
 
-## 📋 项目概述
+**MCASys** 是一个生产级多 Agent 协作框架，提供完整的 REST API + 实时 WebSocket 事件总线 + 美观的 Dark Mode Dashboard。
 
-### 核心定位
+> 架构借鉴 kimi-cli（Python）、kimi-code（TypeScript）、ScriptForge（Java）的生产级设计模式。
 
-以「轻量化、高开发效率、易扩展」为目标，实现多Agent的协同工作与可视化管理，无需前端开发经验即可通过纯Python完成全流程搭建。
+---
 
-### 技术栈
+## 核心特性
 
-- **后端核心**：Python 3.9+（多Agent逻辑、任务调度）
+| 特性 | 说明 |
+|:--|:--|
+| **异步事件总线** | 发布/订阅模式，Agent 间实时解耦通信 |
+| **任务调度器** | 后台异步调度循环，按类型/负载智能分配 |
+| **统一返回类型** | `AgentResult` 替代裸 dict，结构化错误传递 |
+| **泛型重试框架** | `RetryTemplate` 指数退避重试，同步/异步双模式 |
+| **Swarm 并行调度** | 批量并发子任务，两阶段调度（正常+限速） |
+| **Kaos 环境抽象** | 文件系统/进程统一接口，支持本地/远程透明切换 |
+| **Server 锁机制** | 文件互斥锁 + PID 存活检测 + 过期接管 |
+| **DI 容器** | ServiceCollection 注册表 + 单例/延迟实例化管理 |
+| **流式步骤跟踪** | `StreamTracker` start/update/end 三步 API |
+| **FastAPI REST API** | 15 个端点 + WebSocket 实时推送 + Bearer 认证 |
+| **Dark Dashboard** | Glassmorphism + Bento Grid + 实时轮询 + WebSocket |
 
-- **Web UI**：Streamlit（快速构建交互式界面，支持实时刷新）
+---
 
-- **数据模型**：Pydantic（结构化数据校验与管理）
+## 快速开始
 
-- **日志工具**：Loguru（统一日志输出，支持UI实时展示）
+### 环境要求
 
-- **配置管理**：PyYAML（灵活的配置文件管理）
+- Python 3.9+
+- Windows / Linux / macOS
 
-### 核心能力
-
-1. Agent全生命周期管理：启动/停止/重启，实时监控状态（负载、运行状态等）
-
-2. 任务可视化管理：创建任务、配置参数、分配给指定Agent执行
-
-3. 系统日志追踪：按级别筛选日志，实时查看Agent运行与任务执行详情
-
-4. 模块化扩展：新增Agent类型、任务分配算法无需修改核心框架
-
-## 🚀 快速开始
-
-### 1. 环境准备
-
-#### 1.1 安装Python
-
-要求Python版本 ≥ 3.9，推荐3.10版本。下载地址：[Python官方下载](https://www.python.org/downloads/)
-
-#### 1.2 克隆/下载项目
-
-```Plain Text
-
-# 克隆项目（若使用Git）
-git clone https://github.com/lxy3837/MultiCoopAgentSystem
-cd MCASys
-```
-
-#### 1.3 安装依赖
-
-使用pip安装项目所需依赖，建议先创建虚拟环境隔离依赖：
+### 安装
 
 ```bash
-
-# 创建虚拟环境（Windows）
-python -m venv venv
-venv\Scripts\activate
-
-# 创建虚拟环境（Linux/macOS）
-python3 -m venv venv
-source venv/bin/activate
+# 克隆项目
+git clone https://github.com/lxy3837/MultiCoopAgentSystem
+cd MCASys
 
 # 安装依赖
 pip install -r requirements.txt
 ```
 
-### 2. 配置系统（可选）
-
-修改 `config/config.yaml` 配置文件，自定义Agent参数、日志路径、UI刷新间隔等：
-
-```yaml
-
-# 示例配置
-logging:
-  level: "INFO"  # 日志级别：DEBUG/INFO/WARNING/ERROR
-  file_path: "./logs/system.log"  # 日志存储路径
-  rotation: "100MB"  # 日志文件滚动大小
-  retention: "7 days"  # 日志保留时间
-
-agent:
-  default_load_threshold: 0.8  # Agent负载阈值（超过则不分配任务）
-  auto_start: True  # 系统启动时自动启动所有Agent
-
-streamlit:
-  refresh_interval: 2  # UI自动刷新间隔（秒）
-```
-
-### 3. 启动系统
-
-在项目根目录执行以下命令启动Streamlit Web UI：
+### 启动
 
 ```bash
+# 设置 API Key（默认自动生成）
+set MCASYS_API_KEY=your-secret-key   # Windows CMD
+$env:MCASYS_API_KEY = "your-secret-key"  # PowerShell
+export MCASYS_API_KEY=your-secret-key    # Linux/macOS
 
-streamlit run streamlit_app/main_page.py
+# 启动 FastAPI 服务
+python run_fastapi.py
 ```
 
-启动成功后，浏览器会自动打开页面，默认访问地址：`http://localhost:8501`
+启动后访问:
+- **Dashboard**: http://localhost:8000
+- **API 文档 (Swagger)**: http://localhost:8000/docs
+- **Streamlit UI**: http://localhost:8501（需额外 `streamlit run streamlit_app/main_page.py`）
 
-## 📂 项目结构
+---
 
-|目录/文件|核心内容|作用说明|
-|---|---|---|
-|`main.py`|Agent系统初始化入口|创建全局Agent上下文，初始化状态管理器与核心Agent|
-|`streamlit_app/`|Web UI相关代码|包含首页、Agent状态页、任务管理页等可视化模块|
-|`agents/`|Agent核心模块|BaseAgent基类 + specialized_agents专用Agent子包（协调/执行/分析Agent）|
-|`collaboration/`|协作逻辑模块|状态管理、任务分配、Agent通信、冲突解决等核心协作能力|
-|`config/`|配置管理模块|加载yaml配置文件，提供结构化配置模型|
-|`data/`|数据管理模块|任务/Agent状态数据的读写与模型定义|
-|`utils/`|工具函数模块|日志工具、参数校验、通用转换函数等辅助能力|
-|`tests/`|单元测试模块|Agent逻辑、协作规则、工具函数的自动化测试用例|
-|`requirements.txt`|项目依赖清单|记录所有依赖包及版本，用于环境复现|
-## 🔧 核心模块使用指南
+## API 端点
 
-### 1. Agent管理
+所有 `/api/v1/*` 端需要 Bearer Token: `Authorization: Bearer <key>`
 
-#### 1.1 新增Agent类型
+### 系统
 
-1. 在 `agents/specialized_agents/` 下新建文件（如 `monitor_agent.py`）
+| 方法 | 路径 | 说明 | 认证 |
+|:--|:--|:--|:--|
+| GET | `/` | Dashboard 页面 | 否 |
+| GET | `/healthz` | 存活探针 | 否 |
+| GET | `/readyz` | 就绪探针 | 否 |
+| GET | `/docs` | Swagger API 文档 | 否 |
+| WebSocket | `/ws/events` | 实时事件推送 | 否 |
 
-2. 继承 `BaseAgent` 抽象类，实现 `send_message` 和 `execute_task` 方法：
-        `from agents.base_agent import BaseAgent
+### Agent 管理
 
-class MonitorAgent(BaseAgent):
-    def __init__(self, agent_id: str):
-        super().__init__(agent_id, agent_type="monitor")
-    
-    def send_message(self, target_agent_id: str, message: dict):
-        # 实现监控Agent的消息发送逻辑
-        pass
-    
-    def execute_task(self, task: dict) -> dict:
-        # 实现监控任务逻辑（如Agent状态巡检）
-        self.update_state(status="running", load=0.3)
-        # 业务逻辑...
-        self.update_state(status="idle", load=0.0)
-        return {"code": 0, "msg": "监控任务完成"}`
+| 方法 | 路径 | 说明 |
+|:--|:--|:--|
+| GET | `/api/v1/agents` | 获取所有 Agent |
+| GET | `/api/v1/agents/{agent_id}` | 获取单个 Agent |
+| POST | `/api/v1/agents/{agent_id}/start` | 启动 Agent |
+| POST | `/api/v1/agents/{agent_id}/stop` | 停止 Agent |
 
-3. 在 `agents/specialized_agents/__init__.py` 中导出该类，即可在系统中使用
+### 任务管理
 
-### 2. 任务管理
+| 方法 | 路径 | 说明 |
+|:--|:--|:--|
+| GET | `/api/v1/tasks` | 获取所有任务 |
+| GET | `/api/v1/tasks/{task_id}` | 获取单个任务 |
+| POST | `/api/v1/tasks` | 创建任务 |
+| PUT | `/api/v1/tasks/{task_id}/status` | 更新任务状态 |
+| DELETE | `/api/v1/tasks/{task_id}` | 删除任务 |
 
-通过Streamlit「任务管理」页面创建任务，支持以下操作：
+### 系统信息
 
-- 输入任务名称、选择任务类型（数据处理/分析/通知等）
+| 方法 | 路径 | 说明 |
+|:--|:--|:--|
+| GET | `/api/v1/system/stats` | 系统统计 |
+| GET | `/api/v1/system/events` | 事件历史 |
 
-- 以JSON格式配置任务参数（如文件路径、分析规则）
+---
 
-- 点击「创建并分配任务」，系统会自动通过协调Agent分配给最优执行Agent
+## 项目结构
 
-- 在任务列表中可按状态筛选任务（待执行/运行中/已完成/失败）
+```
+MCASys/
+├── app.py                 # FastAPI 主入口（15个端点 + WebSocket）
+├── main.py                # Agent 系统初始化
+├── run_fastapi.py         # Uvicorn 启动脚本
+├── requirements.txt
+│
+├── core/                  # ★ 核心基础设施层
+│   ├── event_bus.py       # 异步发布/订阅事件总线
+│   ├── runtime.py         # 全局运行时上下文（DB + EventBus + Scheduler）
+│   ├── scheduler.py       # 后台任务调度循环
+│   ├── database.py        # SQLAlchemy 异步数据库管理
+│   ├── models.py          # ORM 模型（TaskModel, AgentStateModel）
+│   ├── repository.py      # Repository 数据访问层
+│   ├── security.py        # API Key 认证
+│   ├── result.py          # AgentResult 统一返回类型
+│   ├── retry.py           # RetryTemplate 泛型重试框架
+│   ├── swarm.py           # SwarmBatch 并行批量调度
+│   ├── stream_tracker.py  # StreamTracker 步骤流式跟踪
+│   ├── di.py              # DI 容器（ServiceCollection + Container）
+│   ├── lock.py            # Server 文件互斥锁
+│   └── kaos/              # Kaos 环境抽象层
+│       ├── _base.py       # ABC 基类 + 类型 + 错误
+│       └── local.py       # LocalKaos 实现
+│
+├── agents/                # Agent 实现
+│   ├── base_agent.py      # Agent 抽象基类
+│   └── specialized_agents/
+│       ├── coordinator_agent.py  # 协调 Agent（事件监听）
+│       ├── executor_agent.py     # 执行 Agent
+│       └── analyzer_agent.py     # 分析 Agent
+│
+├── collaboration/         # 协作逻辑
+│   ├── conflict_resolver.py
+│   ├── state_manager.py
+│   └── task_allocation.py
+│
+├── frontend/              # ★ Web Dashboard
+│   ├── index.html         # Dashboard 页面
+│   ├── styles.css         # Dark Mode 2.0 样式
+│   └── app.js             # 前端逻辑（轮询 + WebSocket）
+│
+├── streamlit_app/         # Streamlit UI（备选前端）
+├── config/                # 配置文件（YAML）
+├── data/                  # 数据模型 & 管理
+├── utils/                 # 工具函数（日志等）
+├── tests/                 # 测试用例
+└── docs/
+    └── screenshots/       # 项目截图
+```
 
-### 3. 日志查看
+---
 
-「系统日志」页面支持：
+## 架构对比
 
-- 按日志级别筛选（DEBUG/INFO/WARNING/ERROR）
+从 kimi-cli、kimi-code、ScriptForge 三个项目中借鉴的核心模式：
 
-- 关键词搜索日志内容
+| 来源 | 借鉴模式 | MCASys 实现 |
+|:--|:--|:--|
+| **kimi-cli** (Python) | EventBus / Runtime / Scheduler | `core/event_bus.py`, `core/runtime.py`, `core/scheduler.py` |
+| **kimi-code** (TypeScript) | Kaos 环境抽象 / Swarm 并行调度 / Server 锁 / DI | `core/kaos/`, `core/swarm.py`, `core/lock.py`, `core/di.py` |
+| **ScriptForge** (Java) | AgentResult / RetryTemplate / StreamTracker | `core/result.py`, `core/retry.py`, `core/stream_tracker.py` |
 
-- 日志实时刷新，错误日志标红、警告日志标橙，便于快速定位问题
+---
 
-## 📈 进阶扩展
+## 使用示例
 
-### 1. 自定义任务分配算法
+### 创建任务
 
-修改 `collaboration/task_allocation.py` 中的 `TaskAllocator` 类，实现自定义分配逻辑（如基于强化学习、负载均衡等）：
+```bash
+curl -X POST http://localhost:8000/api/v1/tasks \
+  -H "Authorization: Bearer mcasys-dev-key" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "数据分析", "task_type": "analysis", "description": "分析 CSV 数据"}'
+```
+
+### WebSocket 监听
+
+```javascript
+const ws = new WebSocket('ws://localhost:8000/ws/events');
+ws.onmessage = (e) => console.log(JSON.parse(e.data));
+```
+
+### 代码中使用 AgentResult
 
 ```python
+from core.result import AgentResult
+from core.retry import RetryTemplate
 
-class TaskAllocator:
-    def greedy_allocation(self, task: dict, agents: dict) -> str:
-        # 原有贪心算法：选择负载最低的Agent
-        pass
-    
-    def custom_allocation(self, task: dict, agents: dict) -> str:
-        # 自定义算法：如按Agent类型匹配任务类型
-        for agent_id, agent in agents.items():
-            if agent.agent_type == task["type"] and agent.state.load < 0.5:
-                return agent_id
-        return list(agents.keys())[0]
+@retry(max_retries=3)
+def process_data(filepath: str) -> AgentResult:
+    try:
+        data = read_csv(filepath)
+        return AgentResult.ok(data={"rows": len(data)}, msg="处理成功")
+    except Exception as e:
+        return AgentResult.fail(msg="处理失败", error=str(e))
 ```
 
-### 2. 部署到服务器
+### 使用 StreamTracker
 
-如需在服务器上长期运行，可使用 `nohup` 命令后台启动：
+```python
+from core.stream_tracker import StreamTracker
+
+tracker = StreamTracker("project_001")
+
+with tracker.track("step_1", "数据加载"):
+    load_data()  # 自动 start/end，失败自动标记 failed
+```
+
+---
+
+## 运行测试
 
 ```bash
-
-# Linux/macOS后台启动，日志输出到streamlit.log
-nohup streamlit run streamlit_app/main_page.py --server.port 80 > streamlit.log 2>&1 
+pytest tests/ -v
 ```
 
-启动后通过服务器IP:80即可访问系统（需开放服务器端口权限）。
+---
 
-## ⚠️ 注意事项
+## 许可证
 
-- Python版本需 ≥ 3.9，低于该版本可能导致依赖安装失败
-
-- 启动前确保已激活虚拟环境，避免依赖包冲突
-
-- 日志文件默认存储在 `./logs/` 目录，需确保该目录有写入权限
-
-- 任务参数需严格按照JSON格式填写，否则会导致任务创建失败
-
-## 📞 问题反馈
-
-如遇到以下问题，可按对应方式处理：
-
-- 依赖安装问题：检查Python版本，或使用`pip install --upgrade pip` 更新pip
-
-- Agent启动失败：查看系统日志，检查配置文件中Agent参数是否正确
-
-- UI无法访问：确认Streamlit启动命令是否正确，或更换端口（--server.port 8502）
-
-- 其他功能问题：提交Issue至项目仓库，或联系开发人员
-
-## 📄 许可证
-
-本项目已开源至GitHub，仓库地址：[https://github.com/lxy3837/MultiCoopAgentSystem](https://github.com/lxy3837/MultiCoopAgentSystem)，采用MIT许可证，完整内容如下：
-
-```Plain Text
-
-MIT License
-
-Copyright (c) 2025 lxy3837
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+MIT License · [GitHub](https://github.com/lxy3837/MultiCoopAgentSystem)
