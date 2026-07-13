@@ -52,6 +52,21 @@ class Runtime:
             self._scheduler = TaskScheduler(self)
         return self._scheduler
 
+    @property
+    def llm(self):
+        """获取全局 LLM 客户端"""
+        from core.llm import get_llm_client
+        return get_llm_client()
+
+    @property
+    def llm_available(self) -> bool:
+        """LLM 是否可用"""
+        try:
+            from core.llm import get_llm_client
+            return get_llm_client().is_available
+        except Exception:
+            return False
+
     # ---------- Agent 管理 ----------
 
     def register_agent(self, agent) -> None:

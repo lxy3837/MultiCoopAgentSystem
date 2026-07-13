@@ -39,12 +39,22 @@ class ApiConfig(BaseModel):
                                 description="允许的 CORS 域名")
 
 
+class LLMSettings(BaseModel):
+    """LLM（大模型）配置 — 硅基流动 API"""
+    api_key: str = Field(default="", description="硅基流动 API Key (env: SILICONFLOW_API_KEY)")
+    base_url: str = Field(default="https://api.siliconflow.cn/v1", description="API 地址")
+    model: str = Field(default="deepseek-ai/DeepSeek-V3.2", description="默认模型名称")
+    max_tokens: int = Field(default=4096, description="最大生成 Token 数")
+    temperature: float = Field(default=0.7, description="采样温度")
+
+
 class AppConfig(BaseModel):
     log_config: LogConfig = Field(default_factory=LogConfig)
     database_config: DatabaseConfig = Field(default_factory=DatabaseConfig)
     agent_config: AgentConfig = Field(default_factory=AgentConfig)
     streamlit_config: StreamlitConfig = Field(default_factory=StreamlitConfig)
     api_config: ApiConfig = Field(default_factory=ApiConfig)
+    llm_config: LLMSettings = Field(default_factory=LLMSettings)
 
 
 def _apply_env_overrides(config: AppConfig) -> AppConfig:
@@ -58,6 +68,9 @@ def _apply_env_overrides(config: AppConfig) -> AppConfig:
         "MCASYS_SCHEDULER_INTERVAL": ("agent_config", "scheduler_poll_interval", float),
         "MCASYS_API_KEY": ("api_config", "api_key"),
         "MCASYS_CORS_ORIGINS": ("api_config", "cors_origins", lambda v: [o.strip() for o in v.split(",")]),
+        "SILICONFLOW_API_KEY": ("llm_config", "api_key"),
+        "SILICONFLOW_MODEL": ("llm_config", "model"),
+        "SILICONFLOW_BASE_URL": ("llm_config", "base_url"),
     }
 
     for env_var, (section, field, *transform) in env_mapping.items():
@@ -105,4 +118,4 @@ def load_config(config_path: Optional[str] = None) -> AppConfig:
     return config
 
 
-__all__ = ["LogConfig", "DatabaseConfig", "AgentConfig", "StreamlitConfig", "ApiConfig", "AppConfig", "load_config"]
+__all__ = ["LogConfig", "DatabaseConfig", "AgentConfig", "StreamlitConfig", "ApiConfig", "LLMSettings", "AppConfig", "load_config"]

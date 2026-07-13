@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工作台 - MCASys</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🔧</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="workbench/workbench.css">
+</head>
+<body>
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Workbench Container -->
+  <div class="wb-container">
+    <!-- ====== TOP TOOLBAR ====== -->
+    <header class="wb-toolbar">
+      <div class="wb-toolbar-left">
+        <a href="index.html" class="wb-logo" title="返回首页">
+          <i class="fas fa-robot"></i>
+          <span class="wb-logo-text">MCASys</span>
+          <span class="wb-logo-divider">|</span>
+          <span class="wb-logo-sub">工作台</span>
+        </a>
+        <div class="wb-project-name">
+          <i class="fas fa-folder-open"></i>
+          <span id="wbProjectName">MCASys-Project</span>
+        </div>
+      </div>
+
+      <div class="wb-toolbar-center">
+        <div class="wb-status-badges">
+          <span class="wb-badge" id="wbStatusBadge" data-status="idle">
+            <i class="fas fa-circle"></i> 空闲
+          </span>
+          <span class="wb-badge wb-badge-agents" id="wbAgentBadge">
+            <i class="fas fa-users"></i> <span id="wbAgentCount">0</span> Agent
+          </span>
+          <span class="wb-badge wb-badge-tasks" id="wbTaskBadge">
+            <i class="fas fa-tasks"></i> <span id="wbTaskCount">0</span> 任务
+          </span>
+        </div>
+      </div>
+
+      <div class="wb-toolbar-right">
+        <button class="wb-tb-btn" id="btnStartWorkflow" title="启动工作流 (Ctrl+Enter)">
+          <i class="fas fa-play"></i> 启动工作流
+        </button>
+        <button class="wb-tb-btn" id="btnPauseWorkflow" title="暂停">
+          <i class="fas fa-pause"></i> 暂停
+        </button>
+        <button class="wb-tb-btn" id="btnRefresh" title="刷新">
+          <i class="fas fa-sync-alt"></i> 刷新
+        </button>
+        <button class="wb-tb-btn" id="btnSettings" title="设置">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- ====== MAIN WORKSPACE ====== -->
+    <div class="wb-workspace">
+      <!-- ====== LEFT SIDEBAR ====== -->
+      <aside class="wb-sidebar" id="wbSidebar">
+        <div class="wb-sidebar-tabs">
+          <button class="wb-sb-tab active" data-tab="steps">
+            <i class="fas fa-list-ol"></i> 步骤
+          </button>
+          <button class="wb-sb-tab" data-tab="files">
+            <i class="fas fa-folder-tree"></i> 文件
+          </button>
+        </div>
+
+        <!-- Steps Tab -->
+        <div class="wb-sb-content active" id="sbSteps">
+          <div class="wb-step-tree" id="workflowStepTree">
+            <!-- Dummy loading state, populated by JS -->
+            <div class="wb-skeleton-item">
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text-short"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Files Tab -->
+        <div class="wb-sb-content" id="sbFiles">
+          <div class="wb-file-tree" id="projectFileTree">
+            <div class="wb-empty-state">
+              <i class="fas fa-folder-open"></i>
+              <span>暂无文件</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Collapse Toggle -->
+        <button class="wb-sidebar-toggle" id="btnToggleSidebar" title="折叠侧边栏">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      </aside>
+
+      <!-- ====== MAIN CONTENT ====== -->
+      <div class="wb-main" id="wbMain">
+        <!-- Editor Tabs -->
+        <div class="wb-editor-tabs" id="wbEditorTabs">
+          <div class="wb-editor-tab active" data-step="welcome">
+            <i class="fas fa-home"></i> 欢迎
+          </div>
+          <div class="wb-editor-tab" data-step="init">
+            <i class="fas fa-plug"></i> 初始化
+          </div>
+          <div class="wb-editor-tab" data-step="requirement">
+            <i class="fas fa-search"></i> 需求分析
+          </div>
+          <div class="wb-editor-tab" data-step="dispatch">
+            <i class="fas fa-share-nodes"></i> 任务分发
+          </div>
+          <div class="wb-editor-tab" data-step="execution">
+            <i class="fas fa-microchip"></i> Agent执行
+          </div>
+          <div class="wb-editor-tab" data-step="collection">
+            <i class="fas fa-archive"></i> 结果收集
+          </div>
+          <div class="wb-editor-tab" data-step="review">
+            <i class="fas fa-check-double"></i> 质量审核
+          </div>
+          <div class="wb-editor-tab" data-step="complete">
+            <i class="fas fa-flag-checkered"></i> 完成
+          </div>
+        </div>
+
+        <!-- Editor Content Area -->
+        <div class="wb-editor-content" id="wbEditorContent">
+          <!-- Welcome View -->
+          <div class="wb-content-panel active" id="panel-welcome">
+            <div class="wb-welcome">
+              <div class="wb-welcome-icon">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <h2>欢迎使用 MCASys 工作台</h2>
+              <p>多 Agent 协作系统 — 智能化工作流编排与执行</p>
+              <div class="wb-welcome-actions">
+                <button class="wb-btn wb-btn-primary" id="btnWelcomeStart">
+                  <i class="fas fa-play"></i> 启动工作流
+                </button>
+                <button class="wb-btn wb-btn-secondary" id="btnWelcomeRefresh">
+                  <i class="fas fa-sync-alt"></i> 刷新状态
+                </button>
+              </div>
+              <div class="wb-welcome-stats">
+                <div class="wb-welcome-stat">
+                  <span class="wb-welcome-stat-value" id="welcomeAgentCount">--</span>
+                  <span class="wb-welcome-stat-label">活跃 Agent</span>
+                </div>
+                <div class="wb-welcome-stat">
+                  <span class="wb-welcome-stat-value" id="welcomeTaskCount">--</span>
+                  <span class="wb-welcome-stat-label">任务总数</span>
+                </div>
+                <div class="wb-welcome-stat">
+                  <span class="wb-welcome-stat-value" id="welcomeCompleted">--</span>
+                  <span class="wb-welcome-stat-label">已完成</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Init Panel -->
+          <div class="wb-content-panel" id="panel-init">
+            <div class="wb-panel-header">
+              <h3><i class="fas fa-plug"></i> 初始化</h3>
+            </div>
+            <div class="wb-panel-body">
+              <div class="wb-empty-state" id="initEmpty">
+                <i class="fas fa-plug"></i>
+                <span>等待工作流初始化...</span>
+              </div>
+              <div class="wb-log-list" id="initLogs" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Requirement Panel -->
+          <div class="wb-content-panel" id="panel-requirement">
+            <div class="wb-panel-header">
+              <h3><i class="fas fa-search"></i> 需求分析</h3>
+            </div>
+            <div class="wb-panel-body">
+              <div class="wb-empty-state" id="requirementEmpty">
+                <i class="fas fa-search"></i>
+                <span>等待需求分析...</span>
+              </div>
+              <div class="wb-log-list" id="requirementLogs" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Dispatch Panel -->
+          <div class="wb-content-panel" id="panel-dispatch">
+            <div class="wb-panel-header">
+              <h3><i class="fas fa-share-nodes"></i> 任务分发</h3>
+            </div>
+            <div class="wb-panel-body">
+              <div class="wb-empty-state" id="dispatchEmpty">
+                <i class="fas fa-share-nodes"></i>
+                <span>等待任务分发...</span>
+              </div>
+              <div class="wb-log-list" id="dispatchLogs" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Execution Panel -->
+          <div class="wb-content-panel" id="panel-execution">
+            <div class="wb-panel-header">
+              <h3><i class="fas fa-microchip"></i> Agent 执行</h3>
+            </div>
+            <div class="wb-panel-body">
+              <div class="wb-empty-state" id="executionEmpty">
+                <i class="fas fa-microchip"></i>
+                <span>等待 Agent 执行...</span>
+              </div>
+              <div class="wb-agent-exec-grid" id="executionCards" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Collection Panel -->
+          <div class="wb-content-panel" id="panel-collection">
+            <div class="wb-panel-header">
+              <h3><i class="fas fa-archive"></i> 结果收集</h3>
+            </div>
+            <div class="wb-panel-body">
+              <div class="wb-empty-state" id="collectionEmpty">
+                <i class="fas fa-archive"></i>
+                <span>等待结果收集...</span>
+              </div>
+              <div class="wb-log-list" id="collectionLogs" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Review Panel -->
+          <div class="wb-content-panel" id="panel-review">
+            <div class="wb-panel-header">
+              <h3><i class="fas fa-check-double"></i> 质量审核</h3>
+            </div>
+            <div class="wb-panel-body">
+              <div class="wb-empty-state" id="reviewEmpty">
+                <i class="fas fa-check-double"></i>
+                <span>等待质量审核...</span>
+              </div>
+              <div class="wb-log-list" id="reviewLogs" style="display:none"></div>
+            </div>
+          </div>
+
+          <!-- Complete Panel -->
+          <div class="wb-content-panel" id="panel-complete">
+            <div class="wb-panel-header">
+              <h3><i class="fas fa-flag-checkered"></i> 完成</h3>
+            </div>
+            <div class="wb-panel-body">
+              <div class="wb-empty-state" id="completeEmpty">
+                <i class="fas fa-flag-checkered"></i>
+                <span>工作流完成后将显示结果摘要</span>
+              </div>
+              <div class="wb-summary" id="completeSummary" style="display:none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== RESIZE HANDLE (Main | Right) ====== -->
+      <div class="wb-resize-handle wb-resize-vertical" id="resizeMainRight"></div>
+
+      <!-- ====== RIGHT PANEL ====== -->
+      <div class="wb-right-panel" id="wbRightPanel">
+        <div class="wb-right-header">
+          <div class="wb-right-title">
+            <i class="fas fa-comments"></i> Agent 对话
+          </div>
+          <div class="wb-agent-info" id="agentChatInfo">
+            <i class="fas fa-robot"></i>
+            <span>Coordinator</span>
+            <span class="wb-agent-dot online"></span>
+          </div>
+        </div>
+
+        <div class="wb-chat-messages" id="chatMessages">
+          <div class="wb-chat-empty">
+            <i class="fas fa-comment-dots"></i>
+            <p>与 Coordinator Agent 开始对话</p>
+            <p class="wb-chat-hint">输入消息并按 Ctrl+Enter 发送</p>
+          </div>
+        </div>
+
+        <div class="wb-chat-input-area">
+          <textarea
+            class="wb-chat-input"
+            id="chatInput"
+            placeholder="输入消息..."
+            rows="2"
+          ></textarea>
+          <button class="wb-chat-send" id="btnSendChat" title="发送 (Ctrl+Enter)">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== RESIZE HANDLE (Bottom) ====== -->
+    <div class="wb-resize-handle wb-resize-horizontal" id="resizeBottom"></div>
+
+    <!-- ====== BOTTOM PANEL ====== -->
+    <div class="wb-bottom-panel" id="wbBottomPanel">
+      <div class="wb-bottom-header">
+        <div class="wb-bottom-tabs">
+          <button class="wb-bt-tab active" data-bottom="output">
+            <i class="fas fa-terminal"></i> 输出
+          </button>
+          <button class="wb-bt-tab" data-bottom="problems">
+            <i class="fas fa-exclamation-triangle"></i> 问题
+          </button>
+        </div>
+        <div class="wb-bottom-actions">
+          <button class="wb-bt-action" id="btnClearLogs" title="清除日志">
+            <i class="fas fa-eraser"></i>
+          </button>
+          <button class="wb-bt-action" id="btnToggleBottom" title="折叠面板">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <button class="wb-bt-action" id="btnMaxBottom" title="最大化面板">
+            <i class="fas fa-maximize"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="wb-bottom-content" id="bottomOutput">
+        <div class="wb-log-output" id="logOutput">
+          <div class="wb-log-empty" id="logEmpty">
+            <i class="fas fa-terminal"></i>
+            <span>等待输出...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wb-bottom-content" id="bottomProblems" style="display:none">
+        <div class="wb-log-output" id="problemsOutput">
+          <div class="wb-log-empty">
+            <i class="fas fa-check-circle"></i>
+            <span>暂无问题</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== STATUS BAR ====== -->
+    <footer class="wb-statusbar">
+      <div class="wb-statusbar-left">
+        <span class="wb-sb-item" id="sbCurrentStep">
+          <i class="fas fa-circle-notch"></i> 当前步骤: 空闲
+        </span>
+      </div>
+      <div class="wb-statusbar-center">
+        <div class="wb-progress-container">
+          <div class="wb-progress-bar" id="wbProgressBar">
+            <div class="wb-progress-fill" id="wbProgressFill" style="width:0%"></div>
+          </div>
+          <span class="wb-progress-text" id="wbProgressText">0%</span>
+        </div>
+      </div>
+      <div class="wb-statusbar-right">
+        <span class="wb-sb-item" id="sbConnection">
+          <i class="fas fa-circle" style="font-size:8px;color:var(--accent-emerald)"></i> 已连接
+        </span>
+        <span class="wb-sb-item" id="sbUptime">
+          <i class="fas fa-clock"></i> 运行时间: 0h 0m
+        </span>
+        <span class="wb-sb-item">
+          <i class="fas fa-code-branch"></i> v2.0
+        </span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ====== Settings Modal ====== -->
+  <div class="wb-modal-overlay" id="settingsModal">
+    <div class="wb-modal">
+      <div class="wb-modal-header">
+        <h3><i class="fas fa-cog"></i> 设置</h3>
+        <button class="wb-modal-close" id="btnCloseSettings">&times;</button>
+      </div>
+      <div class="wb-modal-body">
+        <div class="wb-form-group">
+          <label>API 基础地址</label>
+          <input type="text" class="wb-form-input" id="settingApiBase" value="" readonly>
+        </div>
+        <div class="wb-form-group">
+          <label>WebSocket 地址</label>
+          <input type="text" class="wb-form-input" id="settingWsUrl" value="" readonly>
+        </div>
+        <div class="wb-form-group">
+          <label>轮询间隔 (毫秒)</label>
+          <input type="number" class="wb-form-input" id="settingPollInterval" value="3000" min="1000" max="30000">
+        </div>
+        <div class="wb-form-group">
+          <label>
+            <input type="checkbox" id="settingAutoScroll" checked> 日志自动滚动
+          </label>
+        </div>
+      </div>
+      <div class="wb-modal-footer">
+        <button class="wb-btn wb-btn-secondary" id="btnCancelSettings">取消</button>
+        <button class="wb-btn wb-btn-primary" id="btnSaveSettings">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="workbench/workbench.js"></script>
+</body>
+</html>

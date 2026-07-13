@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>系统配置 - MCASys</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚙</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border: #30363d;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-muted: #6e7681;
+      --accent-purple: #a371f7;
+      --accent-cyan: #39d2c0;
+      --accent-green: #3fb950;
+      --accent-amber: #d29922;
+      --accent-red: #f85149;
+      --font-xs: 0.75rem; --font-sm: 0.875rem; --font-md: 1rem; --font-lg: 1.25rem;
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary); color: var(--text-primary);
+      min-height: 100vh; line-height: 1.6;
+    }
+    .bg-ambient { position: fixed; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+    .bg-orb {
+      position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.08;
+    }
+    .bg-orb-1 { width: 600px; height: 600px; background: var(--accent-purple); top: -200px; right: -100px; }
+    .bg-orb-2 { width: 400px; height: 400px; background: var(--accent-cyan); bottom: -100px; left: -100px; }
+    .bg-orb-3 { width: 300px; height: 300px; background: var(--accent-amber); top: 50%; left: 30%; }
+
+    .app-container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; position: relative; z-index: 1; }
+    .header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 24px; background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); margin-bottom: 24px;
+    }
+    .header-brand { display: flex; align-items: center; gap: 12px; }
+    .header-logo {
+      width: 42px; height: 42px; border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; font-weight: 700; color: #fff;
+    }
+    .header-title { font-size: var(--font-lg); font-weight: 700; }
+    .header-title span { background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header-nav { display: flex; gap: 8px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+      border-radius: var(--radius-sm); border: 1px solid var(--border);
+      background: var(--bg-tertiary); color: var(--text-primary);
+      font-size: var(--font-sm); cursor: pointer; transition: all 0.2s;
+      text-decoration: none; font-family: inherit;
+    }
+    .btn:hover { border-color: var(--accent-purple); background: rgba(163,113,247,0.1); }
+    .btn-primary { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
+    .btn-primary:hover { background: #9060e8; }
+    .btn-danger { border-color: var(--accent-red); color: var(--accent-red); }
+    .btn-danger:hover { background: rgba(248,81,73,0.15); }
+    .btn-sm { padding: 5px 12px; font-size: var(--font-xs); }
+    .btn-xs { padding: 3px 8px; font-size: 0.7rem; }
+
+    .config-grid { display: grid; gap: 20px; }
+    .config-card {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .config-card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .config-card-title { font-size: var(--font-md); font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .config-card-icon { font-size: 1.1rem; }
+    .config-card-body { padding: 20px; }
+    .config-card-actions { display: flex; gap: 8px; }
+
+    /* MCP Server Table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: var(--font-sm); }
+    th { color: var(--text-secondary); font-weight: 500; font-size: var(--font-xs); text-transform: uppercase; letter-spacing: 0.05em; }
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: var(--font-xs); font-weight: 500;
+    }
+    .badge-active { background: rgba(63,185,80,0.15); color: var(--accent-green); }
+    .badge-disabled { background: rgba(139,148,158,0.15); color: var(--text-muted); }
+    .badge-connected { background: rgba(57,210,192,0.15); color: var(--accent-cyan); }
+    .code-block {
+      background: var(--bg-primary); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px; font-family: 'JetBrains Mono', monospace;
+      font-size: var(--font-xs); overflow-x: auto; white-space: pre-wrap; word-break: break-all;
+      max-height: 300px; overflow-y: auto; color: var(--accent-cyan);
+    }
+    .empty-state {
+      text-align: center; padding: 40px 20px; color: var(--text-muted);
+    }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 1000; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); width: 90%; max-width: 560px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+    }
+    .modal-header h3 { font-size: var(--font-md); }
+    .modal-close {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.2rem; cursor: pointer;
+    }
+    .modal-close:hover { color: var(--text-primary); }
+    .modal-body { padding: 20px; max-height: 60vh; overflow-y: auto; }
+    .modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: var(--font-sm); font-weight: 500; margin-bottom: 6px; color: var(--text-secondary); }
+    .form-input, .form-select {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); background: var(--bg-primary);
+      color: var(--text-primary); font-size: var(--font-sm); font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none; border-color: var(--accent-purple);
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    textarea.form-input { resize: vertical; min-height: 80px; font-family: 'JetBrains Mono', monospace; font-size: var(--font-xs); }
+
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      padding: 12px 20px; border-radius: var(--radius-sm); font-size: var(--font-sm);
+      animation: slideIn 0.3s ease; max-width: 360px;
+    }
+    .toast-success { background: rgba(63,185,80,0.2); border: 1px solid var(--accent-green); color: var(--accent-green); }
+    .toast-error { background: rgba(248,81,73,0.2); border: 1px solid var(--accent-red); color: var(--accent-red); }
+    .toast-info { background: rgba(57,210,192,0.2); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    .tab-bar { display: flex; border-bottom: 1px solid var(--border); gap: 0; }
+    .tab-btn {
+      padding: 10px 20px; background: none; border: none; border-bottom: 2px solid transparent;
+      color: var(--text-secondary); font-size: var(--font-sm); cursor: pointer;
+      transition: all 0.2s; font-family: inherit;
+    }
+    .tab-btn.active { color: var(--accent-purple); border-bottom-color: var(--accent-purple); }
+    .tab-btn:hover { color: var(--text-primary); }
+
+    .skill-card {
+      background: var(--bg-primary); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px;
+      transition: border-color 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent-purple); }
+    .skill-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .skill-card-name { font-weight: 600; font-size: var(--font-sm); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+    .tag {
+      display: inline-block; padding: 2px 8px; border-radius: 12px;
+      font-size: 0.7rem; font-weight: 500; margin-right: 4px;
+    }
+    .tag-purple { background: rgba(163,113,247,0.15); color: var(--accent-purple); }
+    .tag-cyan { background: rgba(57,210,192,0.15); color: var(--accent-cyan); }
+    .tag-amber { background: rgba(210,153,34,0.15); color: var(--accent-amber); }
+    .tag-green { background: rgba(63,185,80,0.15); color: var(--accent-green); }
+
+    .conn-status {
+      display: flex; align-items: center; gap: 8px; font-size: var(--font-xs); color: var(--text-muted);
+    }
+    .conn-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .conn-dot.online { background: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
+    .conn-dot.offline { background: var(--text-muted); }
+
+    @media (max-width: 768px) {
+      .app-container { padding: 12px; }
+      .form-row { grid-template-columns: 1fr; }
+      .header-nav { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-ambient">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="app-container">
+    <header class="header">
+      <div class="header-brand">
+        <div class="header-logo">⚙</div>
+        <div>
+          <h1 class="header-title"><span>系统配置</span></h1>
+          <div style="font-size:var(--font-xs);color:var(--text-muted)">管理 MCP 服务器、技能和系统设置</div>
+        </div>
+      </div>
+      <div class="header-nav">
+        <div class="conn-status">
+          <div class="conn-dot online" id="connDot"></div>
+          <span id="connText">已连接</span>
+        </div>
+        <a href="index.html" class="btn btn-sm"><i class="fas fa-home"></i> 首页</a>
+        <a href="workbench.html" class="btn btn-sm"><i class="fas fa-desktop"></i> 工作台</a>
+      </div>
+    </header>
+
+    <div class="config-grid">
+      <!-- ====== LLM 大模型配置 ====== -->
+      <div class="config-card" id="llmSection">
+        <div class="config-card-header">
+          <div class="config-card-title">
+            <span class="config-card-icon">🧠</span> 大模型配置（硅基流动）
+          </div>
+          <div class="config-card-actions">
+            <button class="btn btn-sm" onclick="loadLLMConfig()"><i class="fas fa-sync-alt"></i> 刷新</button>
+            <button class="btn btn-primary btn-sm" onclick="saveLLMConfig()"><i class="fas fa-save"></i> 保存</button>
+            <button class="btn btn-sm" id="btnTestLLM" onclick="testLLM()"><i class="fas fa-plug"></i> 测试连接</button>
+          </div>
+        </div>
+        <div class="config-card-body">
+          <div id="llmStatusBar" style="margin-bottom:16px;padding:10px 14px;border-radius:var(--radius-sm);background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.3);color:var(--accent-red);font-size:var(--font-sm);">
+            <i class="fas fa-exclamation-triangle"></i> 未配置 — 请填入硅基流动 API Key
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <div class="form-group">
+                <label class="form-label">API Key *</label>
+                <div style="display:flex;gap:8px;">
+                  <input class="form-input" type="password" id="llmApiKey" placeholder="sk-xxxxxx" style="flex:1;">
+                  <button class="btn btn-sm" onclick="toggleApiKeyVisibility()" title="显示/隐藏"><i class="fas fa-eye" id="eyeIcon"></i></button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">模型名称</label>
+                <select class="form-select" id="llmModel">
+                  <option value="deepseek-ai/DeepSeek-V3.2">DeepSeek-V3.2（推荐）</option>
+                  <option value="deepseek-ai/DeepSeek-V3">DeepSeek-V3</option>
+                  <option value="deepseek-ai/DeepSeek-R1">DeepSeek-R1</option>
+                  <option value="Pro/deepseek-ai/DeepSeek-V3">DeepSeek-V3（Pro）</option>
+                  <option value="Qwen/Qwen2.5-72B-Instruct">Qwen2.5-72B</option>
+                  <option value="Qwen/QwQ-32B">QwQ-32B</option>
+                  <option value="THUDM/glm-4-9b-chat">GLM-4-9B</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label class="form-label">API 地址</label>
+                <input class="form-input" id="llmBaseUrl" value="https://api.siliconflow.cn/v1" placeholder="https://api.siliconflow.cn/v1">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">采样温度</label>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <input type="range" id="llmTemperature" min="0" max="2" step="0.1" value="0.7" style="flex:1;accent-color:var(--accent-purple);" oninput="$('llmTempVal').textContent=this.value">
+                    <span id="llmTempVal" style="font-size:var(--font-sm);min-width:28px;text-align:right;">0.7</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">最大 Token</label>
+                  <select class="form-select" id="llmMaxTokens">
+                    <option value="2048">2048</option>
+                    <option value="4096" selected>4096</option>
+                    <option value="8192">8192</option>
+                    <option value="16384">16384</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== MCP 服务器管理 ====== -->
+      <div class="config-card" id="mcpSection">
+        <div class="config-card-header">
+          <div class="config-card-title">
+            <span class="config-card-icon">🔌</span> MCP 服务器
+          </div>
+          <div class="config-card-actions">
+            <button class="btn btn-sm" onclick="loadMCPServers()"><i class="fas fa-sync-alt"></i> 刷新</button>
+            <button class="btn btn-primary btn-sm" onclick="openAddMCPModal()"><i class="fas fa-plus"></i> 添加</button>
+          </div>
+        </div>
+        <div class="config-card-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>名称</th><th>类型</th><th>地址/命令</th><th>状态</th><th>操作</th></tr>
+              </thead>
+              <tbody id="mcpServerTable">
+                <tr><td colspan="5" class="empty-state"><i class="fas fa-plug"></i>加载中...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== Skills 浏览器 ====== -->
+      <div class="config-card" id="skillsSection">
+        <div class="config-card-header">
+          <div class="config-card-title">
+            <span class="config-card-icon">🧩</span> 技能管理
+          </div>
+          <div class="config-card-actions">
+            <button class="btn btn-sm" onclick="loadSkills()"><i class="fas fa-sync-alt"></i> 刷新</button>
+            <button class="btn btn-primary btn-sm" onclick="reloadSkills()"><i class="fas fa-rotate"></i> 重载</button>
+          </div>
+        </div>
+        <div class="config-card-body">
+          <div class="skills-grid" id="skillsGrid">
+            <div class="empty-state"><i class="fas fa-spinner fa-spin"></i>加载中...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== 系统信息 ====== -->
+      <div class="config-card">
+        <div class="config-card-header">
+          <div class="config-card-title">
+            <span class="config-card-icon">📊</span> 系统信息
+          </div>
+          <div class="config-card-actions">
+            <button class="btn btn-sm" onclick="loadSystemInfo()"><i class="fas fa-sync-alt"></i> 刷新</button>
+          </div>
+        </div>
+        <div class="config-card-body">
+          <div id="systemInfoContent" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+            <div class="empty-state"><i class="fas fa-spinner fa-spin"></i>加载中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 添加 MCP 服务器 Modal ====== -->
+  <div class="modal-overlay" id="addMCPModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-plus-circle"></i> 添加 MCP 服务器</h3>
+        <button class="modal-close" onclick="closeModal('addMCPModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">服务器名称 *</label>
+          <input class="form-input" id="mcpName" placeholder="如: my-filesystem-server">
+        </div>
+        <div class="form-group">
+          <label class="form-label">连接类型 *</label>
+          <select class="form-select" id="mcpType" onchange="onMCPTypeChange()">
+            <option value="STDIO">STDIO（子进程）</option>
+            <option value="HTTP">HTTP</option>
+            <option value="SSE">SSE</option>
+          </select>
+        </div>
+        <div id="mcpStdioFields">
+          <div class="form-group">
+            <label class="form-label">命令 *</label>
+            <input class="form-input" id="mcpCommand" placeholder="如: npx 或 python">
+          </div>
+          <div class="form-group">
+            <label class="form-label">参数（每行一个）</label>
+            <textarea class="form-input" id="mcpArgs" placeholder="-y&#10;@anthropic/mcp-server-filesystem&#10;~/Desktop" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">环境变量（key=value 每行一个）</label>
+            <textarea class="form-input" id="mcpEnv" rows="2" placeholder="API_KEY=xxx"></textarea>
+          </div>
+        </div>
+        <div id="mcpHttpFields" style="display:none">
+          <div class="form-group">
+            <label class="form-label">URL *</label>
+            <input class="form-input" id="mcpUrl" placeholder="https://my-mcp-server.example.com/mcp">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Headers（JSON 格式）</label>
+            <textarea class="form-input" id="mcpHeaders" rows="3" placeholder='{"API_KEY": "your-key"}'></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:var(--font-sm);">
+            <input type="checkbox" id="mcpDisabled"> 禁用（添加后不自动启用）
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('addMCPModal')">取消</button>
+        <button class="btn btn-primary" onclick="addMCPServer()"><i class="fas fa-check"></i> 添加</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 技能详情 Modal ====== -->
+  <div class="modal-overlay" id="skillDetailModal">
+    <div class="modal" style="max-width: 700px;">
+      <div class="modal-header">
+        <h3 id="skillDetailTitle">技能详情</h3>
+        <button class="modal-close" onclick="closeModal('skillDetailModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="skillDetailContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('skillDetailModal')">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api/v1';
+    const API_KEY = 'mcasys-default-key';
+
+    // ── Toast ──────────────────────────────────────
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+
+    async function apiFetch(path, opts = {}) {
+      try {
+        const res = await fetch(`${API}${path}`, {
+          headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json', ...opts.headers },
+          ...opts,
+        });
+        if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || err.error || `HTTP ${res.status}`); }
+        return await res.json();
+      } catch (e) {
+        if (e.message.includes('Failed to fetch')) showToast('无法连接到服务器', 'error');
+        else showToast(e.message, 'error');
+        throw e;
+      }
+    }
+
+    // ── MCP 服务器 ────────────────────────────────
+    async function loadMCPServers() {
+      const tbody = document.getElementById('mcpServerTable');
+      try {
+        const data = await apiFetch('/mcp/servers');
+        if (!data.servers || data.servers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-plug"></i>暂无 MCP 服务器，点击「添加」按钮添加</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.servers.map(s => `
+          <tr>
+            <td><strong>${escapeHtml(s.name)}</strong></td>
+            <td><span class="tag ${s.type === 'STDIO' ? 'tag-purple' : 'tag-cyan'}">${escapeHtml(s.type)}</span></td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:var(--font-xs);max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+              ${escapeHtml(s.url || (s.command ? s.command + ' ' + (s.args||[]).join(' ') : '-'))}
+            </td>
+            <td><span class="badge ${s.disabled ? 'badge-disabled' : 'badge-active'}">${s.disabled ? '已禁用' : '已启用'}</span></td>
+            <td>
+              <button class="btn btn-xs" onclick="connectMCP('${escapeHtml(s.name)}')" title="测试连接"><i class="fas fa-link"></i></button>
+              <button class="btn btn-xs btn-danger" onclick="deleteMCP('${escapeHtml(s.name)}')" title="删除"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i>加载失败</td></tr>';
+      }
+    }
+
+    function openAddMCPModal() { document.getElementById('addMCPModal').classList.add('active'); onMCPTypeChange(); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function onMCPTypeChange() {
+      const type = document.getElementById('mcpType').value;
+      document.getElementById('mcpStdioFields').style.display = type === 'STDIO' ? '' : 'none';
+      document.getElementById('mcpHttpFields').style.display = (type === 'HTTP' || type === 'SSE') ? '' : 'none';
+    }
+
+    async function addMCPServer() {
+      const name = document.getElementById('mcpName').value.trim();
+      const type = document.getElementById('mcpType').value;
+      if (!name) { showToast('请输入服务器名称', 'error'); return; }
+
+      const body = { name, type, disabled: document.getElementById('mcpDisabled').checked };
+      if (type === 'STDIO') {
+        body.command = document.getElementById('mcpCommand').value.trim();
+        body.args = document.getElementById('mcpArgs').value.split('\n').filter(Boolean);
+        const envLines = document.getElementById('mcpEnv').value.split('\n').filter(Boolean);
+        body.env = {};
+        envLines.forEach(l => { const [k, ...v] = l.split('='); if (k) body.env[k.trim()] = v.join('=').trim(); });
+      } else {
+        body.url = document.getElementById('mcpUrl').value.trim();
+        try { body.headers = JSON.parse(document.getElementById('mcpHeaders').value || '{}'); } catch (e) { showToast('Headers JSON 格式错误', 'error'); return; }
+      }
+
+      try {
+        await apiFetch('/mcp/servers', { method: 'POST', body: JSON.stringify(body) });
+        showToast(`服务器 "${name}" 已添加`, 'success');
+        closeModal('addMCPModal');
+        loadMCPServers();
+      } catch (e) {}
+    }
+
+    async function deleteMCP(name) {
+      if (!confirm(`确认删除 MCP 服务器 "${name}"？`)) return;
+      try {
+        await apiFetch(`/mcp/servers/${encodeURIComponent(name)}`, { method: 'DELETE' });
+        showToast(`已删除 "${name}"`, 'success');
+        loadMCPServers();
+      } catch (e) {}
+    }
+
+    async function connectMCP(name) {
+      showToast(`正在连接 "${name}"...`, 'info');
+      try {
+        const data = await apiFetch(`/mcp/servers/${encodeURIComponent(name)}/connect`, { method: 'POST' });
+        const toolNames = (data.tools || []).map(t => t.name).join(', ');
+        showToast(`已连接 "${name}"，发现 ${(data.tools||[]).length} 个工具: ${toolNames || '无'}`, 'success');
+      } catch (e) {}
+    }
+
+    // ── Skills ────────────────────────────────────
+    async function loadSkills() {
+      const grid = document.getElementById('skillsGrid');
+      try {
+        const data = await apiFetch('/skills');
+        if (!data.skills || data.skills.length === 0) {
+          grid.innerHTML = '<div class="empty-state"><i class="fas fa-cube"></i>暂无可用技能</div>';
+          return;
+        }
+        grid.innerHTML = data.skills.map(s => {
+          const typeTag = s.type === 'flow' ? '<span class="tag tag-purple">流程</span>' : '<span class="tag tag-cyan">标准</span>';
+          const agentTag = s.agent ? `<span class="tag tag-amber">${escapeHtml(s.agent)}</span>` : '';
+          return `
+            <div class="skill-card" onclick="viewSkill('${escapeHtml(s.name)}')" style="cursor:pointer;">
+              <div class="skill-card-header">
+                <span class="skill-card-name">${escapeHtml(s.name)}</span>
+                <div>${typeTag} ${agentTag}</div>
+              </div>
+              <div style="font-size:var(--font-xs);color:var(--text-secondary);margin-bottom:8px;">${escapeHtml(s.description)}</div>
+              ${s.when_to_use ? `<div style="font-size:var(--font-xs);color:var(--text-muted);"><i class="fas fa-lightbulb"></i> ${escapeHtml(s.when_to_use)}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        grid.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i>加载失败</div>';
+      }
+    }
+
+    async function reloadSkills() {
+      try {
+        const data = await apiFetch('/skills/reload', { method: 'POST' });
+        showToast(`已重载 ${data.count} 个技能`, 'success');
+        loadSkills();
+      } catch (e) {}
+    }
+
+    async function viewSkill(name) {
+      try {
+        const data = await apiFetch(`/skills/${encodeURIComponent(name)}`);
+        document.getElementById('skillDetailTitle').textContent = `技能: ${data.name}`;
+        const content = document.getElementById('skillDetailContent');
+        let html = `
+          <div style="margin-bottom:16px;">
+            <span class="tag tag-cyan">${data.type === 'flow' ? '流程技能' : '标准技能'}</span>
+            <span class="tag tag-amber">${escapeHtml(data.agent || '通用')}</span>
+            <span class="tag tag-green">${escapeHtml(data.source)}</span>
+          </div>
+          <p style="color:var(--text-secondary);margin-bottom:12px;">${escapeHtml(data.description)}</p>
+          ${data.when_to_use ? `<p style="color:var(--text-muted);margin-bottom:12px;"><strong>使用场景：</strong>${escapeHtml(data.when_to_use)}</p>` : ''}
+          ${data.tools && data.tools.length ? `<p style="margin-bottom:12px;"><strong>所需工具：</strong>${data.tools.map(t => `<span class="tag tag-purple">${escapeHtml(t)}</span>`).join(' ')}</p>` : ''}
+        `;
+        if (data.flow_diagram) {
+          html += `<div style="margin-top:16px;"><strong style="color:var(--text-secondary);">流程图：</strong><div class="code-block" style="margin-top:8px;">${escapeHtml(data.flow_diagram)}</div></div>`;
+        }
+        if (data.system_prompt) {
+          html += `<div style="margin-top:16px;"><strong style="color:var(--text-secondary);">系统提示词：</strong><div class="code-block" style="margin-top:8px;">${escapeHtml(data.system_prompt)}</div></div>`;
+        }
+        content.innerHTML = html;
+        document.getElementById('skillDetailModal').classList.add('active');
+      } catch (e) {}
+    }
+
+    // ── 系统信息 ──────────────────────────────────
+    async function loadSystemInfo() {
+      const container = document.getElementById('systemInfoContent');
+      try {
+        const data = await apiFetch('/system/stats');
+        const tasks = data.tasks || {};
+        const agents = data.agents || {};
+        const sys = data.system || {};
+        let html = '';
+        html += `<div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;"><div style="color:var(--text-muted);font-size:var(--font-xs);">系统版本</div><div style="font-size:var(--font-lg);font-weight:700;">${escapeHtml(sys.version || '-')}</div></div>`;
+        html += `<div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;"><div style="color:var(--text-muted);font-size:var(--font-xs);">在线 Agent</div><div style="font-size:var(--font-lg);font-weight:700;color:var(--accent-green);">${Object.keys(agents).length}</div></div>`;
+        html += `<div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;"><div style="color:var(--text-muted);font-size:var(--font-xs);">事件订阅数</div><div style="font-size:var(--font-lg);font-weight:700;color:var(--accent-cyan);">${escapeHtml(String(data.event_bus_subscribers ?? '-'))}</div></div>`;
+        html += `<div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;"><div style="color:var(--text-muted);font-size:var(--font-xs);">API Key</div><div style="font-family:'JetBrains Mono',monospace;font-size:var(--font-xs);">${escapeHtml(sys.api_key_masked || '-')}</div></div>`;
+        Object.entries(tasks).forEach(([k, v]) => {
+          const color = k === 'completed' ? 'var(--accent-green)' : k === 'failed' ? 'var(--accent-red)' : k === 'running' ? 'var(--accent-cyan)' : 'var(--text-secondary)';
+          html += `<div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;"><div style="color:var(--text-muted);font-size:var(--font-xs);text-transform:uppercase;">${escapeHtml(k)}</div><div style="font-size:var(--font-lg);font-weight:700;color:${color};">${v}</div></div>`;
+        });
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i>加载失败</div>';
+      }
+    }
+
+    // ── WebSocket 连接状态 ────────────────────────
+    let ws;
+    function connectWS() {
+      const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(`${protocol}//${location.host}/ws/events`);
+      ws.onopen = () => {
+        document.getElementById('connDot').className = 'conn-dot online';
+        document.getElementById('connText').textContent = '已连接';
+      };
+      ws.onclose = () => {
+        document.getElementById('connDot').className = 'conn-dot offline';
+        document.getElementById('connText').textContent = '已断开';
+        setTimeout(connectWS, 5000);
+      };
+      ws.onerror = () => ws.close();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ── LLM 配置 ──────────────────────────────────
+    async function loadLLMConfig() {
+      try {
+        const data = await apiFetch('/config/llm');
+        const bar = document.getElementById('llmStatusBar');
+        if (data.available) {
+          bar.style.background = 'rgba(63,185,80,0.1)';
+          bar.style.borderColor = 'rgba(63,185,80,0.3)';
+          bar.style.color = 'var(--accent-green)';
+          bar.innerHTML = '<i class="fas fa-check-circle"></i> 已配置 — 模型: ' + escapeHtml(data.model) + ' | Key: ' + escapeHtml(data.api_key_masked);
+          document.getElementById('btnTestLLM').style.display = '';
+        } else {
+          bar.style.background = 'rgba(248,81,73,0.1)';
+          bar.style.borderColor = 'rgba(248,81,73,0.3)';
+          bar.style.color = 'var(--accent-red)';
+          bar.innerHTML = '<i class="fas fa-exclamation-triangle"></i> 未配置 — 请填入硅基流动 API Key';
+          document.getElementById('btnTestLLM').style.display = 'none';
+        }
+        document.getElementById('llmModel').value = data.model;
+        document.getElementById('llmBaseUrl').value = data.base_url;
+        document.getElementById('llmTemperature').value = data.temperature;
+        document.getElementById('llmTempVal').textContent = data.temperature;
+        document.getElementById('llmMaxTokens').value = String(data.max_tokens);
+      } catch (e) {}
+    }
+
+    async function saveLLMConfig() {
+      const apiKey = document.getElementById('llmApiKey').value.trim();
+      const body = {
+        model: document.getElementById('llmModel').value,
+        base_url: document.getElementById('llmBaseUrl').value.trim(),
+        temperature: parseFloat(document.getElementById('llmTemperature').value),
+        max_tokens: parseInt(document.getElementById('llmMaxTokens').value),
+      };
+      if (apiKey) body.api_key = apiKey;
+      try {
+        const data = await apiFetch('/config/llm', { method: 'PUT', body: JSON.stringify(body) });
+        if (data.available) {
+          showToast('LLM 配置已保存并生效！模型: ' + data.model, 'success');
+          document.getElementById('llmApiKey').value = '';
+        } else {
+          showToast('配置已保存但 Key 未设置', 'info');
+        }
+        loadLLMConfig();
+      } catch (e) {}
+    }
+
+    async function testLLM() {
+      const btn = document.getElementById('btnTestLLM');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 测试中...';
+      try {
+        const data = await apiFetch('/chat', { method: 'POST', body: JSON.stringify({ message: '你好，请用一句话回复确认你正常工作。' }) });
+        showToast('LLM 连接成功！回复: ' + (data.message || '').substring(0, 60) + '...', 'success');
+      } catch (e) {
+        showToast('连接失败: ' + e.message, 'error');
+      }
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-plug"></i> 测试连接';
+    }
+
+    function toggleApiKeyVisibility() {
+      const input = document.getElementById('llmApiKey');
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text'; icon.className = 'fas fa-eye-slash';
+      } else {
+        input.type = 'password'; icon.className = 'fas fa-eye';
+      }
+    }
+
+    // ── Init ──────────────────────────────────────
+    loadMCPServers();
+    loadSkills();
+    loadSystemInfo();
+    loadLLMConfig();
+    connectWS();
+  </script>
+</body>
+</html>

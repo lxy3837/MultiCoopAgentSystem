@@ -18,6 +18,8 @@ class SystemContext:
     """全局系统上下文"""
     config: AppConfig
     runtime: Runtime
+    skill_manager: object = None
+    mcp_config_manager: object = None
     initialized: bool = False
 
 
@@ -45,10 +47,13 @@ async def _setup_agents(runtime: Runtime):
 
 
 async def _agent_startup(runtime: Runtime):
-    """Agent 启动时注册事件监听"""
+    """Agent 启动时注册事件监听并加载技能"""
     for agent in runtime._agents.values():
         if hasattr(agent, "on_startup"):
             await agent.on_startup()
+        # 自动加载匹配的技能
+        if hasattr(agent, "load_skills"):
+            agent.load_skills()
 
 
 async def init_agent_system_async() -> SystemContext:
@@ -86,6 +91,15 @@ async def init_agent_system_async() -> SystemContext:
 
     # 7. Agent 启动时注册事件监听
     await _agent_startup(_system_context.runtime)
+
+    # 8. 初始化技能系统
+    _system_context.skill_manager = _init_skills()
+
+    # 9. 初始化 MCP 配置
+    _system_context.mcp_config_manager = _init_mcp()
+
+    # 10. 初始化 LLM 客户端
+    _init_llm_from_config(_system_context.config.llm_config)
 
     _system_context.initialized = True
     return _system_context
@@ -131,3 +145,57 @@ async def shutdown_system():
         await _system_context.runtime.stop()
         await _system_context.runtime.db_manager.close()
         _system_context.initialized = False
+
+
+def _init_skills():
+    """初始化技能系统"""
+    try:
+        from skills import SkillManager
+        manager = SkillManager()
+        skills = manager.discover_skills()
+        from utils.logger import get_logger
+        logger = get_logger("system")
+        logger.info(f"技能系统初始化完成: 加载 {len(skills)} 个技能")
+        return manager
+    except Exception as e:
+        from utils.logger import get_logger
+        logger = get_logger("system")
+        logger.warning(f"技能系统初始化失败: {e}")
+        return None
+
+
+def _init_mcp():
+    """初始化 MCP 配置管理"""
+    try:
+        from mcp import MCPConfigManager
+        manager = MCPConfigManager()
+        servers = manager.list_servers()
+        from utils.logger import get_logger
+        logger = get_logger("system")
+        logger.info(f"MCP 配置加载完成: {len(servers)} 个服务器")
+        return manager
+    except Exception as e:
+        from utils.logger import get_logger
+        logger = get_logger("system")
+        logger.warning(f"MCP 配置加载失败: {e}")
+        return None
+
+
+def _init_llm_from_config(llm_config):
+    """初始化 LLM 客户端"""
+    try:
+        from core.llm import LLMConfig, init_llm_client
+        config = LLMConfig(
+            api_key=llm_config.api_key,
+            base_url=llm_config.base_url,
+            model=llm_config.model,
+            max_tokens=llm_config.max_tokens,
+            temperature=llm_config.temperature,
+        )
+        client = init_llm_client(config)
+        return client
+    except Exception as e:
+        from utils.logger import get_logger
+        logger = get_logger("system")
+        logger.warning(f"LLM 初始化失败: {e}")
+        return None

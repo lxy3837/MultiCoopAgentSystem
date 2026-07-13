@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "_comment": "在此配置 MCP 服务器",
+    "_example_brave_search": {
+      "type": "HTTP",
+      "url": "https://brave-search-mcp.example.com/mcp",
+      "headers": {"API_KEY": "your-key-here"},
+      "disabled": true
+    },
+    "_example_filesystem": {
+      "type": "STDIO",
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-filesystem", "~/Desktop"],
+      "disabled": true
+    }
+  }
+}

@@ -26,6 +26,7 @@ class BaseAgent(ABC):
         self.state = AgentState(agent_id=agent_id, agent_type=agent_type)
         self.logger = get_logger(f"agent_{agent_id}")
         self.runtime: Optional[object] = None  # 由 Runtime.register_agent() 注入
+        self._skills: list = []  # Agent 加载的技能列表
 
     @property
     def event_bus(self):
@@ -40,6 +41,64 @@ class BaseAgent(ABC):
         if self.runtime is None:
             raise RuntimeError(f"Agent {self.agent_id} 未注册到 Runtime")
         return self.runtime.db_manager
+
+    @property
+    def llm(self):
+        """便捷访问 LLM 客户端"""
+        if self.runtime is None:
+            raise RuntimeError(f"Agent {self.agent_id} 未注册到 Runtime")
+        return self.runtime.llm
+
+    @property
+    def llm_available(self) -> bool:
+        """LLM 是否可用"""
+        if self.runtime is None:
+            return False
+        return self.runtime.llm_available
+
+    @property
+    def skills(self) -> list:
+        """获取 Agent 已加载的技能列表"""
+        return self._skills
+
+    def load_skills(self, skill_names: list[str] | None = None):
+        """加载技能到 Agent
+
+        从全局 SkillManager 中加载匹配此 Agent 类型的技能。
+        如果指定了 skill_names，则只加载指定的技能。
+
+        Args:
+            skill_names: 要加载的技能名称列表，None 表示加载所有匹配的技能
+        """
+        try:
+            from skills import SkillManager
+            manager = SkillManager()
+            agent_skills = manager.list_skills_by_agent(self.agent_type)
+            if skill_names:
+                agent_skills = [s for s in agent_skills if s.name in skill_names]
+            for skill_meta in agent_skills:
+                skill = manager.get_skill(skill_meta.name)
+                if skill and skill not in self._skills:
+                    self._skills.append(skill)
+            self.logger.info(
+                f"Agent {self.agent_id} 已加载 {len(self._skills)} 个技能: "
+                f"{[s.meta.name for s in self._skills]}"
+            )
+        except Exception as e:
+            self.logger.warning(f"Agent {self.agent_id} 加载技能失败: {e}")
+
+    def get_skill_prompts(self) -> str:
+        """获取所有已加载技能的系统提示词合并文本
+
+        Returns:
+            合并后的技能提示词，供 LLM 作为系统提示使用
+        """
+        if not self._skills:
+            return ""
+        prompts = []
+        for skill in self._skills:
+            prompts.append(skill.get_system_prompt())
+        return "\n\n---\n\n".join(prompts)
 
     def start(self):
         """启动 Agent"""

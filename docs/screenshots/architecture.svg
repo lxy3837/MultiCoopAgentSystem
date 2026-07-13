@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" font-family="'Segoe UI','Inter',system-ui,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="frontend" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a371f7"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="api" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#39d2c0"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="agent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3fb950"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+    <linearGradient id="infra" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f85149"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <linearGradient id="llmGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="700" fill="url(#bg)"/>
+  
+  <!-- Grid lines -->
+  <g stroke="#21262d" stroke-width="0.5" opacity="0.5">
+    <line x1="0" y1="200" x2="1100" y2="200"/>
+    <line x1="0" y1="290" x2="1100" y2="290"/>
+    <line x1="0" y1="430" x2="1100" y2="430"/>
+    <line x1="0" y1="550" x2="1100" y2="550"/>
+  </g>
+
+  <!-- Title -->
+  <text x="550" y="45" text-anchor="middle" fill="#e6edf3" font-size="24" font-weight="700" letter-spacing="2">
+    MCASys — 多 Agent 协作系统架构
+  </text>
+  <text x="550" y="68" text-anchor="middle" fill="#8b949e" font-size="13">
+    Multi-Agent Collaboration System Architecture
+  </text>
+
+  <!-- ====== Layer 1: Frontend ====== -->
+  <rect x="60" y="90" width="980" height="92" rx="10" fill="rgba(163,113,247,0.08)" stroke="rgba(163,113,247,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="60" y="90" width="8" height="92" rx="4" fill="url(#frontend)"/>
+  <text x="85" y="120" fill="#a371f7" font-size="14" font-weight="700">Frontend 前端层</text>
+  <text x="85" y="140" fill="#8b949e" font-size="11">Dark Mode Dashboard · Glassmorphism · Bento Grid · WebSocket 实时推送</text>
+
+  <!-- Frontend items -->
+  <rect x="380" y="105" width="100" height="35" rx="6" fill="rgba(163,113,247,0.15)" stroke="rgba(163,113,247,0.4)"/>
+  <text x="430" y="126" text-anchor="middle" fill="#a371f7" font-size="11" font-weight="600">Dashboard</text>
+  <rect x="500" y="105" width="100" height="35" rx="6" fill="rgba(163,113,247,0.15)" stroke="rgba(163,113,247,0.4)"/>
+  <text x="550" y="126" text-anchor="middle" fill="#a371f7" font-size="11" font-weight="600">Workbench</text>
+  <rect x="620" y="105" width="100" height="35" rx="6" fill="rgba(163,113,247,0.15)" stroke="rgba(163,113,247,0.4)"/>
+  <text x="670" y="126" text-anchor="middle" fill="#a371f7" font-size="11" font-weight="600">Config</text>
+  <rect x="740" y="105" width="100" height="35" rx="6" fill="rgba(163,113,247,0.15)" stroke="rgba(163,113,247,0.4)"/>
+  <text x="790" y="126" text-anchor="middle" fill="#a371f7" font-size="11" font-weight="600">Streamlit</text>
+
+  <!-- Arrows F->A -->
+  <line x1="550" y1="182" x2="550" y2="205" stroke="#a371f7" stroke-width="2" opacity="0.5"/>
+  <polygon points="545,202 550,212 555,202" fill="#a371f7" opacity="0.5"/>
+
+  <!-- ====== Layer 2: API Gateway ====== -->
+  <rect x="60" y="200" width="980" height="72" rx="10" fill="rgba(57,210,192,0.08)" stroke="rgba(57,210,192,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="60" y="200" width="8" height="72" rx="4" fill="url(#api)"/>
+  <text x="85" y="228" fill="#39d2c0" font-size="14" font-weight="700">FastAPI REST + WebSocket 网关</text>
+  <text x="85" y="248" fill="#8b949e" font-size="11">20+ 端点 · Bearer JWT 认证 · CORS · 事件流 · Swagger 文档</text>
+
+  <rect x="380" y="215" width="130" height="35" rx="6" fill="rgba(57,210,192,0.15)" stroke="rgba(57,210,192,0.4)"/>
+  <text x="445" y="236" text-anchor="middle" fill="#39d2c0" font-size="11" font-weight="600">REST API /api/v1/*</text>
+  <rect x="530" y="215" width="130" height="35" rx="6" fill="rgba(57,210,192,0.15)" stroke="rgba(57,210,192,0.4)"/>
+  <text x="595" y="236" text-anchor="middle" fill="#39d2c0" font-size="11" font-weight="600">WebSocket /ws</text>
+  <rect x="680" y="215" width="100" height="35" rx="6" fill="rgba(236,72,153,0.15)" stroke="rgba(236,72,153,0.4)"/>
+  <text x="730" y="236" text-anchor="middle" fill="#ec4899" font-size="11" font-weight="600">LLM Chat</text>
+
+  <!-- Arrows API -> Core -->
+  <line x1="550" y1="272" x2="550" y2="298" stroke="#39d2c0" stroke-width="2" opacity="0.5"/>
+  <polygon points="545,295 550,305 555,295" fill="#39d2c0" opacity="0.5"/>
+
+  <!-- ====== Layer 3: Core Engine ====== -->
+  <rect x="60" y="290" width="980" height="122" rx="10" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="60" y="290" width="8" height="122" rx="4" fill="url(#core)"/>
+  <text x="85" y="318" fill="#f59e0b" font-size="14" font-weight="700">Core Engine 核心引擎层</text>
+  <text x="85" y="338" fill="#8b949e" font-size="11">信号总线 · 任务调度 · 并行编排 · 重试 · 流式跟踪 · DI 容器</text>
+
+  <!-- Core modules -->
+  <rect x="85" y="352" width="105" height="40" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)"/>
+  <text x="137" y="370" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">EventBus</text>
+  <text x="137" y="383" text-anchor="middle" fill="#8b949e" font-size="9">发布/订阅</text>
+
+  <rect x="205" y="352" width="105" height="40" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)"/>
+  <text x="257" y="370" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Scheduler</text>
+  <text x="257" y="383" text-anchor="middle" fill="#8b949e" font-size="9">异步任务调度</text>
+
+  <rect x="325" y="352" width="105" height="40" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)"/>
+  <text x="377" y="370" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Swarm</text>
+  <text x="377" y="383" text-anchor="middle" fill="#8b949e" font-size="9">并行批量</text>
+
+  <rect x="445" y="352" width="105" height="40" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)"/>
+  <text x="497" y="370" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Retry</text>
+  <text x="497" y="383" text-anchor="middle" fill="#8b949e" font-size="9">指数退避</text>
+
+  <rect x="565" y="352" width="105" height="40" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)"/>
+  <text x="617" y="370" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">StreamTracker</text>
+  <text x="617" y="383" text-anchor="middle" fill="#8b949e" font-size="9">流式跟踪</text>
+
+  <rect x="685" y="352" width="105" height="40" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)"/>
+  <text x="737" y="370" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">DI Container</text>
+  <text x="737" y="383" text-anchor="middle" fill="#8b949e" font-size="9">依赖注入</text>
+
+  <rect x="805" y="352" width="105" height="40" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)"/>
+  <text x="857" y="370" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Kaos</text>
+  <text x="857" y="383" text-anchor="middle" fill="#8b949e" font-size="9">环境抽象</text>
+
+  <!-- Arrows Core -> Agent -->
+  <line x1="550" y1="412" x2="550" y2="438" stroke="#f59e0b" stroke-width="2" opacity="0.5"/>
+  <polygon points="545,435 550,445 555,435" fill="#f59e0b" opacity="0.5"/>
+
+  <!-- ====== Layer 4: Agent ====== -->
+  <rect x="60" y="430" width="980" height="102" rx="10" fill="rgba(63,185,80,0.08)" stroke="rgba(63,185,80,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="60" y="430" width="8" height="102" rx="4" fill="url(#agent)"/>
+  <text x="85" y="458" fill="#3fb950" font-size="14" font-weight="700">Agent Layer Agent 智能层</text>
+  <text x="85" y="478" fill="#8b949e" font-size="11">协调型 · 执行型 · 分析型 · LLM 推理 · Skills 技能系统</text>
+
+  <rect x="85" y="490" width="180" height="32" rx="6" fill="rgba(63,185,80,0.15)" stroke="rgba(63,185,80,0.4)"/>
+  <text x="175" y="510" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">🐙 Coordinator Agent</text>
+
+  <rect x="280" y="490" width="150" height="32" rx="6" fill="rgba(63,185,80,0.15)" stroke="rgba(63,185,80,0.4)"/>
+  <text x="355" y="510" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">⚡ Executor Agent</text>
+
+  <rect x="445" y="490" width="150" height="32" rx="6" fill="rgba(63,185,80,0.15)" stroke="rgba(63,185,80,0.4)"/>
+  <text x="520" y="510" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">🔬 Analyzer Agent</text>
+
+  <rect x="620" y="488" width="140" height="36" rx="6" fill="rgba(236,72,153,0.12)" stroke="rgba(236,72,153,0.3)"/>
+  <text x="690" y="503" text-anchor="middle" fill="#ec4899" font-size="10" font-weight="600">DeepSeek-V3.2</text>
+  <text x="690" y="517" text-anchor="middle" fill="#8b949e" font-size="8">LLM 推理</text>
+
+  <rect x="775" y="488" width="100" height="36" rx="6" fill="rgba(139,148,158,0.12)" stroke="rgba(139,148,158,0.3)"/>
+  <text x="825" y="503" text-anchor="middle" fill="#8b949e" font-size="10" font-weight="600">Skills</text>
+  <text x="825" y="517" text-anchor="middle" fill="#8b949e" font-size="8">3 个技能</text>
+
+  <rect x="890" y="488" width="100" height="36" rx="6" fill="rgba(139,148,158,0.12)" stroke="rgba(139,148,158,0.3)"/>
+  <text x="940" y="503" text-anchor="middle" fill="#8b949e" font-size="10" font-weight="600">MCP</text>
+  <text x="940" y="517" text-anchor="middle" fill="#8b949e" font-size="8">协议</text>
+
+  <!-- Arrows Agent -> Infra -->
+  <line x1="550" y1="532" x2="550" y2="558" stroke="#3fb950" stroke-width="2" opacity="0.5"/>
+  <polygon points="545,555 550,565 555,555" fill="#3fb950" opacity="0.5"/>
+
+  <!-- ====== Layer 5: Infrastructure ====== -->
+  <rect x="60" y="550" width="980" height="62" rx="10" fill="rgba(248,81,73,0.08)" stroke="rgba(248,81,73,0.3)" stroke-width="1" filter="url(#shadow)"/>
+  <rect x="60" y="550" width="8" height="62" rx="4" fill="url(#infra)"/>
+  <text x="85" y="576" fill="#f85149" font-size="14" font-weight="700">Infrastructure 基础设施层</text>
+  <text x="85" y="596" fill="#8b949e" font-size="11">SQLite 数据库 · MCP Server · SiliconFlow API · 文件系统</text>
+
+  <rect x="380" y="562" width="120" height="32" rx="6" fill="rgba(248,81,73,0.12)" stroke="rgba(248,81,73,0.3)"/>
+  <text x="440" y="582" text-anchor="middle" fill="#f85149" font-size="11" font-weight="600">🗄 SQLite</text>
+  <rect x="520" y="562" width="120" height="32" rx="6" fill="rgba(248,81,73,0.12)" stroke="rgba(248,81,73,0.3)"/>
+  <text x="580" y="582" text-anchor="middle" fill="#f85149" font-size="11" font-weight="600">🔌 MCP Server</text>
+  <rect x="660" y="562" width="120" height="32" rx="6" fill="rgba(248,81,73,0.12)" stroke="rgba(248,81,73,0.3)"/>
+  <text x="720" y="582" text-anchor="middle" fill="#f85149" font-size="11" font-weight="600">☁ SiliconFlow</text>
+
+  <!-- Legend -->
+  <rect x="60" y="635" width="980" height="50" rx="8" fill="rgba(255,255,255,0.02)" stroke="#30363d" stroke-width="1"/>
+  <text x="85" y="658" fill="#8b949e" font-size="10">协议栈:</text>
+  <rect x="155" y="647" width="12" height="12" rx="3" fill="#a371f7"/>
+  <text x="173" y="658" fill="#8b949e" font-size="10" font-weight="500">前端 (HTML/CSS/JS)</text>
+  <rect x="320" y="647" width="12" height="12" rx="3" fill="#39d2c0"/>
+  <text x="338" y="658" fill="#8b949e" font-size="10" font-weight="500">REST + WebSocket (FastAPI)</text>
+  <rect x="505" y="647" width="12" height="12" rx="3" fill="#f59e0b"/>
+  <text x="523" y="658" fill="#8b949e" font-size="10" font-weight="500">Core Engine (Python)</text>
+  <rect x="660" y="647" width="12" height="12" rx="3" fill="#3fb950"/>
+  <text x="678" y="658" fill="#8b949e" font-size="10" font-weight="500">Agent + Skills + MCP</text>
+  <rect x="835" y="647" width="12" height="12" rx="3" fill="#ec4899"/>
+  <text x="853" y="658" fill="#8b949e" font-size="10" font-weight="500">LLM (SiliconFlow)</text>
+
+  <!-- MCP Connection line -->
+  <line x1="940" y1="506" x2="940" y2="562" stroke="#8b949e" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <!-- LLM Connection line -->
+  <line x1="690" y1="524" x2="690" y2="562" stroke="#ec4899" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+  <!-- Version badge -->
+  <rect x="460" y="640" width="180" height="20" rx="10" fill="rgba(163,113,247,0.1)" stroke="rgba(163,113,247,0.3)"/>
+  <text x="550" y="654" text-anchor="middle" fill="#a371f7" font-size="10" font-weight="600">v2.1 · MIT License</text>
+</svg>

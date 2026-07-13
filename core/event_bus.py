@@ -69,6 +69,11 @@ class EventBus:
         """订阅所有事件"""
         self._wildcard_subscribers.append(callback)
 
+    def unsubscribe_all(self, callback: Callable):
+        """取消订阅所有事件"""
+        if callback in self._wildcard_subscribers:
+            self._wildcard_subscribers.remove(callback)
+
     def unsubscribe(self, event_type: EventType, callback: Callable):
         """取消订阅"""
         if event_type in self._subscribers:

@@ -1,4 +1,5 @@
 # agents/specialized_agents/coordinator_agent.py
+import json
 from agents.base_agent import BaseAgent
 from datetime import datetime
 from core.event_bus import Event, EventType
@@ -55,11 +56,13 @@ class CoordinatorAgent(BaseAgent):
             await self.resolve_conflicts()
 
     async def execute_task(self, task: dict) -> dict:
-        """协调 Agent 本身不执行任务，而是协调分配"""
+        """协调 Agent 本身不执行任务，而是协调分配。
+        当 LLM 可用时，使用 AI 智能规划任务分配策略。"""
         self.update_state(status="running", load=0.3)
         try:
             task_id = task.get("task_id", "unknown")
             task_type = task.get("type", "unknown")
+            task_name = task.get("name", f"Task-{task_id}")
 
             self.logger.info(f"协调 Agent 开始分配任务: {task_id} ({task_type})")
 
@@ -68,20 +71,78 @@ class CoordinatorAgent(BaseAgent):
             if conflicts_detected:
                 await self.resolve_conflicts()
 
-            # 2. 分配（由调度器完成实际分配，这里负责记录和通知）
+            # 2. 使用 LLM 智能规划（如果可用）
+            plan = None
+            if self.llm_available:
+                try:
+                    plan = await self._ai_plan_task(task)
+                except Exception as e:
+                    self.logger.warning(f"LLM 规划失败，使用默认策略: {e}")
+
+            # 3. 分配通知
             await self.broadcast("task_assigning", {
                 "task_id": task_id,
                 "task_type": task_type,
+                "task_name": task_name,
                 "coordinator": self.agent_id,
+                "ai_plan": plan,
             })
 
             self.update_state(status="idle", load=0.0)
-            return {"code": 0, "msg": f"任务 {task_id} 已进入调度队列"}
+            return {"code": 0, "msg": f"任务 {task_id} 已进入调度队列", "ai_plan": plan}
 
         except Exception as e:
             self.update_state(status="error", error_msg=str(e), load=0.0)
             self.logger.error(f"协调 Agent 任务分配失败: {e}")
             return {"code": -1, "msg": str(e)}
+
+    async def _ai_plan_task(self, task: dict) -> dict | None:
+        """使用 AI 分析任务并生成分配计划"""
+        task_id = task.get("task_id", "unknown")
+        task_type = task.get("type", "unknown")
+        task_name = task.get("name", "")
+        params = task.get("params", {})
+
+        # 获取可用 agent 列表
+        agents = self.runtime.get_all_agents()
+        agent_list = [
+            {"id": aid, "type": a.agent_type, "status": a.state.status, "load": a.state.load}
+            for aid, a in agents.items()
+        ]
+
+        prompt = f"""你需要为以下任务制定分配策略：
+
+## 任务信息
+- 任务ID: {task_id}
+- 任务类型: {task_type}  
+- 任务名称: {task_name}
+- 参数: {json.dumps(params, ensure_ascii=False)}
+
+## 可用 Agent
+{json.dumps(agent_list, ensure_ascii=False, indent=2)}
+
+## 要求
+分析任务需求，推荐最合适的 Agent 分配方案。考虑：
+1. 任务类型与 Agent 类型的匹配度
+2. Agent 当前负载状态
+3. 是否有历史冲突风险
+
+返回 JSON 格式：
+{{"recommended_agent": "agent_id", "reason": "分配理由", "priority": "high|medium|low", "estimated_steps": 预估步骤数}}"""
+
+        result = await self.llm.agent_analyze(
+            task_description=prompt,
+            skill_prompts=self.get_skill_prompts(),
+        )
+        # 尝试提取 JSON
+        try:
+            import re
+            json_match = re.search(r'\{[\s\S]*\}', result)
+            if json_match:
+                return json.loads(json_match.group())
+        except Exception:
+            pass
+        return {"raw_plan": result}
 
     async def _check_conflicts(self) -> int:
         """检测系统冲突"""
