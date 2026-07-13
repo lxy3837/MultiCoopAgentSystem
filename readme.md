@@ -89,8 +89,12 @@ cd MCASys
 # 安装依赖
 pip install -r requirements.txt
 
+# 配置 (首次): 复制模板并修改，config.yaml 已 .gitignore 忽略不会提交
+cp config/config.example.yaml config/config.yaml
+
 # 启动服务
-$env:MCASYS_API_KEY = "mcasys-default-key"   # PowerShell
+$env:SILICONFLOW_API_KEY = "sk-xxxxxxxxxxxxx"    # 硅基流动 API Key
+$env:MCASYS_API_KEY = "mcasys-default-key"        # MCASys 认证 Key
 python run_fastapi.py
 ```
 
