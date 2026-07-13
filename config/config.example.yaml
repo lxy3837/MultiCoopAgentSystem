@@ -1,0 +1,41 @@
+# ============================================================
+# MCASys 配置文件模板
+# 复制为 config.yaml 后修改: cp config.example.yaml config.yaml
+# config.yaml 已被 .gitignore 忽略，不会提交到仓库
+# ============================================================
+
+# ---- Agent 配置 ----
+agent_config:
+  auto_start: true                 # 启动时自动启动 Agent
+  default_load_threshold: 0.8      # 默认负载阈值 (任务分配上限)
+  heartbeat_interval: 5            # 心跳间隔 (秒)
+
+# ---- API 服务配置 ----
+api_config:
+  api_key: mcasys-default-key      # API 认证密钥 (生产环境请更换，可通过 MCASYS_API_KEY 环境变量覆盖)
+  cors_origins:
+    - http://localhost:3000
+    - http://localhost:8501
+  rate_limit: 100/minute           # 频率限制
+
+# ---- LLM (大模型) 配置 — 硅基流动 API ----
+llm_config:
+  api_key: ""                      # !!! 不要填在这里，通过环境变量 SILICONFLOW_API_KEY 设置 !!!
+  base_url: https://api.siliconflow.cn/v1
+  model: deepseek-ai/DeepSeek-V3.2  # 可选模型见: https://siliconflow.cn/models
+  max_tokens: 4096
+  temperature: 0.7
+
+# ---- 日志配置 ----
+log_config:
+  level: INFO                      # DEBUG / INFO / WARNING / ERROR
+  file_path: ./logs/system.log
+  rotation: 100MB                  # 日志轮转大小
+  retention: 7 days                # 日志保留时间
+  format: '<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+
+# ---- Streamlit UI 配置 ----
+streamlit_config:
+  page_title: MCASys 多Agent协作系统
+  page_icon: 🤖
+  refresh_interval: 2              # 页面刷新间隔 (秒)
