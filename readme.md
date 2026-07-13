@@ -26,6 +26,19 @@
 
 ---
 
+## 界面截图
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.svg" alt="Dashboard" width="400">
+  <img src="docs/screenshots/workbench.svg" alt="Workbench" width="400">
+  <img src="docs/screenshots/config.svg" alt="Config" width="400">
+  <img src="docs/screenshots/architecture.svg" alt="Architecture" width="400">
+</p>
+
+从左到右、从上到下：Dashboard 首页 · 工作台 IDE · 系统配置 · 五层架构图
+
+---
+
 ## 新功能 (v2.1)
 
 ### 🧠 LLM 大模型集成

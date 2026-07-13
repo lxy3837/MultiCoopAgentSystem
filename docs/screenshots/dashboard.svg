@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="'Inter','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="cardBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.04)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.01)"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a371f7"/>
+      <stop offset="100%" stop-color="#39d2c0"/>
+    </linearGradient>
+    <linearGradient id="greenGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(63,185,80,0.15)"/>
+      <stop offset="100%" stop-color="rgba(63,185,80,0.02)"/>
+    </linearGradient>
+    <linearGradient id="cyanGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(57,210,192,0.12)"/>
+      <stop offset="100%" stop-color="rgba(57,210,192,0.02)"/>
+    </linearGradient>
+    <linearGradient id="purpleGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(163,113,247,0.12)"/>
+      <stop offset="100%" stop-color="rgba(163,113,247,0.02)"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="#000" flood-opacity="0.3"/></filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="600" fill="url(#bgGrad)"/>
+
+  <!-- Ambient orbs -->
+  <circle cx="850" cy="0" r="250" fill="#a371f7" opacity="0.04"/>
+  <circle cx="100" cy="500" r="200" fill="#39d2c0" opacity="0.04"/>
+  <circle cx="500" cy="300" r="180" fill="#f59e0b" opacity="0.02"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1000" height="52" fill="rgba(22,27,34,0.95)" stroke="#30363d" stroke-width="0.5"/>
+  <text x="24" y="33" fill="#e6edf3" font-size="15" font-weight="700">MCASys</text>
+  <text x="94" y="33" fill="#8b949e" font-size="12">| 多Agent协作系统</text>
+  <circle cx="260" cy="26" r="4" fill="#3fb950"/>
+  <text x="272" y="32" fill="#8b949e" font-size="11">系统正常</text>
+  <rect x="720" y="14" width="80" height="24" rx="5" fill="#21262d" stroke="#30363d"/>
+  <text x="760" y="31" text-anchor="middle" fill="#8b949e" font-size="10">工作台</text>
+  <rect x="810" y="14" width="60" height="24" rx="5" fill="#21262d" stroke="#30363d"/>
+  <text x="840" y="31" text-anchor="middle" fill="#8b949e" font-size="10">配置</text>
+  <rect x="880" y="14" width="60" height="24" rx="5" fill="#21262d" stroke="#30363d"/>
+  <text x="910" y="31" text-anchor="middle" fill="#8b949e" font-size="10">API</text>
+  <rect x="950" y="16" width="30" height="20" rx="10" fill="rgba(163,113,247,0.15)" stroke="rgba(163,113,247,0.3)"/>
+  <text x="965" y="31" text-anchor="middle" fill="#a371f7" font-size="10">A</text>
+
+  <!-- Stats Row -->
+  <rect x="20" y="68" width="230" height="80" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="40" y="92" fill="#8b949e" font-size="10">在线 Agent</text>
+  <text x="40" y="128" fill="#3fb950" font-size="28" font-weight="700">4</text>
+  <rect x="40" y="136" width="10" height="4" rx="2" fill="#3fb950" opacity="0.5"/>
+
+  <rect x="262" y="68" width="230" height="80" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="282" y="92" fill="#8b949e" font-size="10">今日任务</text>
+  <text x="282" y="128" fill="#39d2c0" font-size="28" font-weight="700">12</text>
+  <text x="378" y="128" fill="#8b949e" font-size="12">/ 完成 8</text>
+
+  <rect x="504" y="68" width="230" height="80" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="524" y="92" fill="#8b949e" font-size="10">Skills 技能</text>
+  <text x="524" y="128" fill="#a371f7" font-size="28" font-weight="700">3</text>
+  <text x="612" y="128" fill="#8b949e" font-size="12">/ 已匹配</text>
+
+  <rect x="746" y="68" width="234" height="80" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="766" y="92" fill="#8b949e" font-size="10">LLM 状态</text>
+  <text x="766" y="128" fill="#3fb950" font-size="28" font-weight="700">已接入</text>
+  <text x="856" y="128" fill="#8b949e" font-size="12">DeepSeek-V3.2</text>
+
+  <!-- Main Grid -->
+  <rect x="20" y="164" width="480" height="190" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="40" y="192" fill="#e6edf3" font-size="13" font-weight="600">🐙 Agent 状态面板</text>
+
+  <!-- Agent rows -->
+  <rect x="36" y="208" width="448" height="36" rx="6" fill="rgba(163,113,247,0.06)" stroke="rgba(163,113,247,0.15)"/>
+  <circle cx="56" cy="226" r="5" fill="#3fb950"/><text x="70" y="230" fill="#e6edf3" font-size="11">coordinator_001</text>
+  <text x="240" y="230" fill="#8b949e" font-size="10">协调型</text>
+  <rect x="320" y="218" width="60" height="16" rx="4" fill="rgba(63,185,80,0.15)"/>
+  <text x="350" y="231" text-anchor="middle" fill="#3fb950" font-size="9">online</text>
+  <text x="420" y="230" fill="#8b949e" font-size="10">workflow-orchestration</text>
+
+  <rect x="36" y="252" width="448" height="36" rx="6" fill="rgba(57,210,192,0.04)" stroke="rgba(57,210,192,0.1)"/>
+  <circle cx="56" cy="270" r="5" fill="#3fb950"/><text x="70" y="274" fill="#e6edf3" font-size="11">executor_001</text>
+  <text x="240" y="274" fill="#8b949e" font-size="10">执行型</text>
+  <rect x="320" y="262" width="60" height="16" rx="4" fill="rgba(63,185,80,0.15)"/>
+  <text x="350" y="275" text-anchor="middle" fill="#3fb950" font-size="9">online</text>
+  <text x="420" y="274" fill="#8b949e" font-size="10">idle</text>
+
+  <rect x="36" y="296" width="448" height="36" rx="6" fill="rgba(245,158,11,0.04)" stroke="rgba(245,158,11,0.1)"/>
+  <circle cx="56" cy="314" r="5" fill="#3fb950"/><text x="70" y="318" fill="#e6edf3" font-size="11">executor_002</text>
+  <text x="240" y="318" fill="#8b949e" font-size="10">执行型</text>
+  <rect x="320" y="306" width="60" height="16" rx="4" fill="rgba(63,185,80,0.15)"/>
+  <text x="350" y="319" text-anchor="middle" fill="#3fb950" font-size="9">online</text>
+  <text x="420" y="318" fill="#8b949e" font-size="10">idle</text>
+
+  <rect x="512" y="164" width="468" height="190" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="532" y="192" fill="#e6edf3" font-size="13" font-weight="600">📈 近期任务</text>
+
+  <rect x="528" y="208" width="436" height="30" rx="4" fill="rgba(63,185,80,0.05)"/>
+  <text x="544" y="228" fill="#3fb950" font-size="10" font-weight="600">✓ 数据分析任务</text>
+  <text x="750" y="228" fill="#3fb950" font-size="10">completed</text>
+  <text x="900" y="228" fill="#8b949e" font-size="9">2min ago</text>
+
+  <rect x="528" y="246" width="436" height="30" rx="4" fill="rgba(57,210,192,0.05)"/>
+  <text x="544" y="266" fill="#39d2c0" font-size="10" font-weight="600">○ 代码审查任务</text>
+  <text x="750" y="266" fill="#39d2c0" font-size="10">running</text>
+  <text x="900" y="266" fill="#8b949e" font-size="9">just now</text>
+
+  <rect x="528" y="284" width="436" height="30" rx="4" fill="rgba(248,81,73,0.05)"/>
+  <text x="544" y="304" fill="#f85149" font-size="10" font-weight="600">✗ 模型训练任务</text>
+  <text x="750" y="304" fill="#f85149" font-size="10">failed</text>
+  <text x="900" y="304" fill="#8b949e" font-size="9">5min ago</text>
+
+  <rect x="528" y="322" width="436" height="24" rx="4" fill="rgba(139,148,158,0.03)"/>
+  <text x="544" y="339" fill="#8b949e" font-size="10">- 文档生成任务</text>
+  <text x="750" y="339" fill="#8b949e" font-size="10">pending</text>
+  <text x="900" y="339" fill="#8b949e" font-size="9">10min ago</text>
+
+  <!-- Bottom Row -->
+  <rect x="20" y="370" width="480" height="100" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="40" y="398" fill="#e6edf3" font-size="13" font-weight="600">🔌 WebSocket 事件流</text>
+  <text x="40" y="422" fill="#8b949e" font-size="10">ws://localhost:8000/ws/events</text>
+  <rect x="40" y="434" width="440" height="2" rx="1" fill="#21262d"/>
+  <text x="40" y="455" fill="#39d2c0" font-size="9" font-family="monospace">{"type":"agent_heartbeat","agent":"coordinator_001","ts":"10:30:01"}</text>
+
+  <rect x="512" y="370" width="468" height="100" rx="12" fill="#161b22" stroke="#21262d" filter="url(#shadow)"/>
+  <text x="532" y="398" fill="#e6edf3" font-size="13" font-weight="600">🧠 LLM 模型信息</text>
+  <text x="532" y="420" fill="#8b949e" font-size="11">模型: deepseek-ai/DeepSeek-V3.2</text>
+  <text x="532" y="440" fill="#8b949e" font-size="11">API: https://api.siliconflow.cn/v1</text>
+  <text x="532" y="460" fill="#8b949e" font-size="11">状态: <tspan fill="#3fb950">已连接</tspan></text>
+
+  <!-- Bottom Bar -->
+  <rect x="20" y="486" width="960" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#21262d"/>
+  <text x="40" y="510" fill="#8b949e" font-size="10">© 2026 MCASys v2.1</text>
+  <text x="420" y="510" fill="#8b949e" font-size="10">API: http://localhost:8000/docs</text>
+  <circle cx="760" cy="504" r="4" fill="#3fb950"/>
+  <text x="772" y="510" fill="#3fb950" font-size="10">WebSocket Connected</text>
+  <text x="920" y="510" fill="#8b949e" font-size="10">MIT License</text>
+</svg>

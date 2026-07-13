@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Inter','Segoe UI',system-ui,sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/><stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.3"/></filter>
+  </defs>
+
+  <rect width="1000" height="560" fill="url(#bgGrad)"/>
+
+  <!-- Toolbar -->
+  <rect x="0" y="0" width="1000" height="44" fill="rgba(22,27,34,0.95)" stroke="#30363d" stroke-width="0.5"/>
+  <rect x="12" y="10" width="44" height="24" rx="5" fill="url(#bgGrad)" stroke="#30363d"/>
+  <text x="34" y="27" text-anchor="middle" fill="#a371f7" font-size="9" font-weight="700">MCASys</text>
+  <text x="68" y="26" fill="#e6edf3" font-size="11" font-weight="600">MyProject</text>
+  <rect x="160" y="12" width="70" height="20" rx="4" fill="rgba(63,185,80,0.15)"/>
+  <text x="195" y="27" text-anchor="middle" fill="#3fb950" font-size="9">Running</text>
+  <rect x="300" y="10" width="55" height="24" rx="5" fill="#21262d" stroke="#30363d"/>
+  <text x="327" y="27" text-anchor="middle" fill="#e6edf3" font-size="9">▶ 启动</text>
+  <rect x="362" y="10" width="55" height="24" rx="5" fill="#21262d" stroke="#30363d"/>
+  <text x="389" y="27" text-anchor="middle" fill="#e6edf3" font-size="9">⏸ 暂停</text>
+  <rect x="424" y="10" width="55" height="24" rx="5" fill="#21262d" stroke="#30363d"/>
+  <text x="451" y="27" text-anchor="middle" fill="#e6edf3" font-size="9">↻ 刷新</text>
+
+  <!-- Left Sidebar (260px) -->
+  <rect x="0" y="44" width="220" height="516" fill="#161b22" stroke="#30363d" stroke-width="0.5"/>
+  <!-- Tabs -->
+  <rect x="0" y="44" width="109" height="30" fill="rgba(163,113,247,0.1)" stroke="rgba(163,113,247,0.2)"/>
+  <text x="55" y="64" text-anchor="middle" fill="#a371f7" font-size="10" font-weight="600">📋 步骤树</text>
+  <rect x="110" y="44" width="110" height="30" fill="rgba(255,255,255,0.01)"/>
+  <text x="165" y="64" text-anchor="middle" fill="#8b949e" font-size="10">📁 文件树</text>
+
+  <!-- Step Tree -->
+  <text x="16" y="100" fill="#8b949e" font-size="9" font-weight="600">WORKFLOW</text>
+  <rect x="16" y="114" width="188" height="28" rx="5" fill="rgba(63,185,80,0.1)" stroke="rgba(63,185,80,0.2)"/>
+  <text x="32" y="133" fill="#3fb950" font-size="10">✓ 初始化</text>
+  <rect x="16" y="148" width="188" height="28" rx="5" fill="rgba(57,210,192,0.08)" stroke="rgba(57,210,192,0.15)"/>
+  <text x="32" y="167" fill="#39d2c0" font-size="10">○ 需求分析</text>
+  <rect x="16" y="182" width="188" height="28" rx="5" fill="rgba(139,148,158,0.03)"/>
+  <text x="32" y="201" fill="#8b949e" font-size="10">○ 任务分发</text>
+  <rect x="16" y="216" width="188" height="28" rx="5" fill="rgba(139,148,158,0.03)"/>
+  <text x="32" y="235" fill="#8b949e" font-size="10">○ Agent 执行</text>
+  <rect x="16" y="250" width="188" height="28" rx="5" fill="rgba(139,148,158,0.03)"/>
+  <text x="32" y="269" fill="#8b949e" font-size="10">○ 结果收集</text>
+  <rect x="16" y="284" width="188" height="28" rx="5" fill="rgba(139,148,158,0.03)"/>
+  <text x="32" y="303" fill="#8b949e" font-size="10">○ 质量审核</text>
+  <rect x="16" y="318" width="188" height="28" rx="5" fill="rgba(139,148,158,0.03)"/>
+  <text x="32" y="337" fill="#8b949e" font-size="10">○ 完成</text>
+
+  <!-- Editor Area -->
+  <rect x="220" y="44" width="460" height="370" fill="#0d1117"/>
+  <!-- Editor Tabs -->
+  <rect x="220" y="44" width="460" height="30" fill="#161b22" stroke="#30363d" stroke-width="0.5"/>
+  <rect x="220" y="44" width="120" height="30" fill="#0d1117"/>
+  <text x="230" y="64" fill="#e6edf3" font-size="10">📄 init_step.py</text>
+  <text x="308" y="64" fill="#6e7681" font-size="9">×</text>
+  <rect x="342" y="46" width="100" height="26" rx="3" fill="#161b22"/>
+  <text x="352" y="64" fill="#8b949e" font-size="10">📄 analysis.py</text>
+  <rect x="444" y="46" width="100" height="26" rx="3" fill="#161b22"/>
+  <text x="454" y="64" fill="#8b949e" font-size="10">📄 dispatch.py</text>
+
+  <!-- Editor content -->
+  <text x="236" y="100" fill="#3fb950" font-size="11" font-weight="600">📝 Step 2: 需求分析</text>
+  <rect x="236" y="115" width="428" height="55" rx="6" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)"/>
+  <text x="252" y="135" fill="#e6edf3" font-size="10">分析当前任务需求并结合 Skills 技能系统提供执行方</text>
+  <text x="252" y="155" fill="#e6edf3" font-size="10">案。使用 Coordinator Agent 协调下游 Executor。</text>
+
+  <text x="236" y="195" fill="#8b949e" font-size="10" font-weight="600">🐙 Coordinator 输出</text>
+  <rect x="236" y="208" width="428" height="90" rx="6" fill="rgba(57,210,192,0.04)" stroke="rgba(57,210,192,0.1)"/>
+  <text x="252" y="228" fill="#39d2c0" font-size="9" font-family="monospace">[Coordinator] 任务分析完成</text>
+  <text x="252" y="246" fill="#8b949e" font-size="9" font-family="monospace">→ 推荐 executor_001（负载 0%）</text>
+  <text x="252" y="264" fill="#8b949e" font-size="9" font-family="monospace">→ Skills 匹配: workflow-orchestration</text>
+  <text x="252" y="282" fill="#8b949e" font-size="9" font-family="monospace">→ 预估 3 步骤，优先级 high</text>
+
+  <text x="236" y="315" fill="#8b949e" font-size="10" font-weight="600">⚡ Executor 状态</text>
+  <rect x="236" y="328" width="428" height="55" rx="6" fill="rgba(63,185,80,0.03)" stroke="rgba(63,185,80,0.08)"/>
+  <text x="252" y="348" fill="#3fb950" font-size="9" font-family="monospace">[executor_001] 等待任务分配...</text>
+  <text x="252" y="366" fill="#6e7681" font-size="9" font-family="monospace">当前负载: 0% | 待执行: 0 | 已完成: 8</text>
+
+  <!-- Right Panel (320px) -->
+  <rect x="680" y="44" width="320" height="516" fill="#161b22" stroke="#30363d" stroke-width="0.5"/>
+  <text x="696" y="68" fill="#e6edf3" font-size="11" font-weight="600">💬 Agent Chat</text>
+  <rect x="696" y="80" width="288" height="1" fill="#30363d"/>
+
+  <!-- Chat messages -->
+  <rect x="696" y="96" width="288" height="80" rx="6" fill="rgba(163,113,247,0.06)" stroke="rgba(163,113,247,0.1)"/>
+  <text x="712" y="114" fill="#a371f7" font-size="9" font-weight="600">🧠 DeepSeek-V3.2</text>
+  <text x="712" y="132" fill="#e6edf3" font-size="10">收到您的消息，正在分析任务需求...</text>
+  <text x="712" y="152" fill="#8b949e" font-size="10">Coordinator 已收到任务，正在进行智能调度</text>
+  <text x="712" y="170" fill="#8b949e" font-size="10">分配。</text>
+
+  <rect x="696" y="186" width="288" height="50" rx="6" fill="rgba(57,210,192,0.04)" stroke="rgba(57,210,192,0.08)"/>
+  <text x="712" y="204" fill="#39d2c0" font-size="9" font-weight="600">👤 User</text>
+  <text x="712" y="224" fill="#e6edf3" font-size="10">帮我分析一下这个项目的架构设计</text>
+
+  <rect x="696" y="246" width="288" height="70" rx="6" fill="rgba(163,113,247,0.06)" stroke="rgba(163,113,247,0.1)"/>
+  <text x="712" y="264" fill="#a371f7" font-size="9" font-weight="600">🧠 DeepSeek-V3.2</text>
+  <text x="712" y="282" fill="#e6edf3" font-size="10">该项目采用五层架构：</text>
+  <text x="712" y="300" fill="#e6edf3" font-size="10">前端 → FastAPI → 核心引擎 → Agent</text>
+
+  <!-- Chat input -->
+  <rect x="696" y="490" width="288" height="40" rx="6" fill="#0d1117" stroke="#30363d"/>
+  <text x="712" y="515" fill="#6e7681" font-size="10">发送消息...</text>
+  <rect x="940" y="496" width="32" height="28" rx="5" fill="#a371f7"/>
+  <text x="956" y="516" text-anchor="middle" fill="#fff" font-size="12">→</text>
+
+  <!-- Bottom Panel (Output) -->
+  <rect x="220" y="414" width="460" height="146" fill="#0d1117" stroke="#30363d" stroke-width="0.5"/>
+  <text x="234" y="434" fill="#e6edf3" font-size="10" font-weight="600">📤 输出日志</text>
+  <rect x="234" y="448" width="432" height="1" fill="#30363d"/>
+  <text x="234" y="468" fill="#8b949e" font-size="9" font-family="monospace">$ [10:30:01] System initialized</text>
+  <text x="234" y="484" fill="#3fb950" font-size="9" font-family="monospace">$ [10:30:02] coordinator_001 online</text>
+  <text x="234" y="500" fill="#3fb950" font-size="9" font-family="monospace">$ [10:30:02] executor_001 online</text>
+  <text x="234" y="516" fill="#39d2c0" font-size="9" font-family="monospace">$ [10:30:03] LLM connected: DeepSeek-V3.2</text>
+  <text x="234" y="532" fill="#8b949e" font-size="9" font-family="monospace">$ [10:30:04] Skills loaded: 3 | MCP servers: 0</text>
+  <text x="234" y="548" fill="#a371f7" font-size="9" font-family="monospace">$ [10:30:05] WebSocket server active</text>
+
+  <!-- Status Bar -->
+  <rect x="220" y="536" width="780" height="24" fill="rgba(22,27,34,0.95)" stroke="#30363d" stroke-width="0.5"/>
+  <text x="234" y="553" fill="#8b949e" font-size="9">Step 2/7: 需求分析</text>
+  <rect x="350" y="542" width="100" height="12" rx="6" fill="#21262d"/>
+  <rect x="350" y="542" width="28" height="12" rx="6" fill="rgba(57,210,192,0.4)"/>
+  <text x="460" y="553" fill="#6e7681" font-size="9">28%</text>
+  <circle cx="680" cy="548" r="3" fill="#3fb950"/>
+  <text x="690" y="553" fill="#3fb950" font-size="9">WebSocket 已连接</text>
+</svg>
